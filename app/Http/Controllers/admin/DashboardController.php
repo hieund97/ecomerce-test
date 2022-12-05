@@ -16,4 +16,19 @@ class DashboardController extends Controller
     {
         return view('admin/dashboard');
     }
+
+    public function products()
+    {
+        return view('admin/products');
+    }
+
+    public function users()
+    {
+        return view('admin/users');
+    }
+
+    public function categories()
+    {
+        return view('admin/categories');
+    }
 }

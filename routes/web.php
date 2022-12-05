@@ -18,4 +18,9 @@ Route::group([
     'namespace' => 'App\Http\Controllers\admin'
 ], function(){
     Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/products', 'DashboardController@products')->name('products');
+    Route::get('/users', 'DashboardController@users')->name('users');
+    Route::get('/categories', 'DashboardController@categories')->name('categories');
 });
+
+

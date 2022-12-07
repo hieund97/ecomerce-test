@@ -31,4 +31,9 @@ class DashboardController extends Controller
     {
         return view('admin/categories');
     }
+
+    public function blogs()
+    {
+        return view('admin/blogs');
+    }
 }

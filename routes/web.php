@@ -21,6 +21,7 @@ Route::group([
     Route::get('/products', 'DashboardController@products')->name('products');
     Route::get('/users', 'DashboardController@users')->name('users');
     Route::get('/categories', 'DashboardController@categories')->name('categories');
+    Route::get('/blogs', 'DashboardController@blogs')->name('blogs');
 });
 
 

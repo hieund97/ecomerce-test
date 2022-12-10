@@ -36,13 +36,12 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->name);
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        
+
         session()->flash('create_user', 'success');
         return redirect(route('list.users'));
     }

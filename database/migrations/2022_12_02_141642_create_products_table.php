@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('sku', 7)->unique();
             $table->string('name');
-            $table->text('slug')->unique();
+            $table->string('slug', 250)->unique();
             $table->decimal('price', 10, 2)->default(0);
             $table->integer('is_new')->comment('0: not new, 1: new');
             $table->integer('is_sale')->comment('0: not sale, 1: sale');

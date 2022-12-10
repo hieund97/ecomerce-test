@@ -29,6 +29,9 @@ Route::group([
         Route::get('/', 'UsersController@index')->name('list.users');
         Route::get('/create', 'UsersController@create')->name('create.users');
         Route::post('/store', 'UsersController@store')->name('store.users');
+        Route::get('/edit/{id}', 'UsersController@edit')->name('edit.users');
+        Route::put('/update/{id}', 'UsersController@update')->name('update.users');
+        Route::delete('/delete/{id}', 'UsersController@destroy')->name('delete.users');
     });
 });
 

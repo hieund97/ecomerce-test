@@ -45,6 +45,13 @@ class UsersController extends Controller
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:6|required_with:re_password|same:re_password',
                 're_password' => 'min:6|required',
+            ],
+            [
+                'required' => 'Trường :attribute không được để trống!',
+                'min' => 'Trường :attribute phải có tối thiểu :min kí tự',
+                'max'=> 'Trường :attribute chỉ tối đa :max kí tự',
+                'same' => ':attribute và :other không khớp nhau',
+                'required_with' => 'Mật khẩu không được để trống',
             ]
         );
 
@@ -102,6 +109,13 @@ class UsersController extends Controller
                 'email' => 'required|email|unique:users,email,' . $id,
                 'password' => 'required|min:6|required_with:re_password|same:re_password',
                 're_password' => 'min:6|required',
+            ],
+            [
+                'required' => 'Trường :attribute không được để trống!',
+                'min' => 'Trường :attribute phải có tối thiểu :min kí tự',
+                'max'=> 'Trường :attribute chỉ tối đa :max kí tự',
+                'same' => ':attribute và :other không khớp nhau',
+                'required_with' => 'Mật khẩu không được để trống',
             ]
         );
 

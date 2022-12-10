@@ -38,18 +38,19 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), 
-        [
-            'name' => 'required|max:255|min:3',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|required_with:re_password|same:re_password',
-            're_password' => 'min:6|required',
-        ]
-       );
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|max:255|min:3',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6|required_with:re_password|same:re_password',
+                're_password' => 'min:6|required',
+            ]
+        );
 
-       if($validator->fails()){
+        if ($validator->fails()) {
             return redirect(route('create.users'))->withErrors($validator)->withInput($request->all());
-       }
+        }
 
         User::create([
             'name' => $request->name,
@@ -94,21 +95,22 @@ class UsersController extends Controller
      */
     public function update($id, Request $request)
     {
-        $validator = Validator::make($request->all(), 
-        [
-            'name' => 'required|max:255|min:3',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'required|min:6|required_with:re_password|same:re_password',
-            're_password' => 'min:6|required',
-        ]
-       );
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|max:255|min:3',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'password' => 'required|min:6|required_with:re_password|same:re_password',
+                're_password' => 'min:6|required',
+            ]
+        );
 
-       if($validator->fails()){
+        if ($validator->fails()) {
             return redirect(route('edit.users', $id))->withErrors($validator)->withInput();
-       }
+        }
 
         $user = User::find($id);
-        if($user){
+        if ($user) {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -119,7 +121,6 @@ class UsersController extends Controller
         }
         session()->flash('user_not_exist', 'fail');
         return redirect(route('list.users'));
-
     }
 
     /**
@@ -131,7 +132,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        if($user){
+        if ($user) {
             $user->delete();
             session()->flash('delete_user', 'success');
             return redirect(route('list.users'));

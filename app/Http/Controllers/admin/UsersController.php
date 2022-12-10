@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -15,7 +16,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('admin/users/list');
+        $aryUser = User::select(['id', 'name', 'email', 'status'])->limit(10)->get();
+        return view('admin/users/list', compact('aryUser'));
     }
 
     /**
@@ -36,10 +38,24 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), 
+        [
+            'name' => 'required|max:255|min:3',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|required_with:re_password|same:re_password',
+            're_password' => 'min:6|required',
+        ]
+       );
+
+       if($validator->fails()){
+            return redirect(route('create.users'))->withErrors($validator)->withInput($request->all());
+       }
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'status' => $request->status,
         ]);
 
         session()->flash('create_user', 'success');
@@ -65,7 +81,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -75,9 +92,34 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), 
+        [
+            'name' => 'required|max:255|min:3',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'password' => 'required|min:6|required_with:re_password|same:re_password',
+            're_password' => 'min:6|required',
+        ]
+       );
+
+       if($validator->fails()){
+            return redirect(route('edit.users', $id))->withErrors($validator)->withInput();
+       }
+
+        $user = User::find($id);
+        if($user){
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+            session()->flash('edit_user', 'success');
+            return redirect(route('list.users'));
+        }
+        session()->flash('user_not_exist', 'fail');
+        return redirect(route('list.users'));
+
     }
 
     /**
@@ -88,6 +130,13 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        if($user){
+            $user->delete();
+            session()->flash('delete_user', 'success');
+            return redirect(route('list.users'));
+        }
+        session()->flash('user_not_exist', 'fail');
+        return redirect(route('list.users'));
     }
 }

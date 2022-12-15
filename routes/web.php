@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\BlogsController;
 use App\Http\Controllers\admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,18 @@ Route::group([
         Route::put('/update/{id}', 'UsersController@update')->name('update.users');
         Route::delete('/delete/{id}', 'UsersController@destroy')->name('delete.users');
     });
+    // Route blogs
+    Route::group([
+        'prefix' => 'blogs'
+    ], function(){
+        Route::get('/', 'BlogsController@index')->name('list.blogs');
+        Route::get('/create', 'BlogsController@create')->name('create.blogs');
+        Route::post('/store', 'BlogsController@store')->name('store.blogs');
+        Route::get('/edit/{id}', 'BlogsController@edit')->name('edit.blogs');
+        Route::put('/update/{id}', 'BlogsController@update')->name('update.blogs');
+        Route::delete('/delete/{id}', 'BlogsController@destroy')->name('delete.blogs');
+    });
+
 });
 
 

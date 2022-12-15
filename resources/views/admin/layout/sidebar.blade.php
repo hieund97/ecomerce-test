@@ -37,9 +37,10 @@
                 {{-- End Dashboard --}}
 
                 {{-- Users --}}
-                <li class="nav-item {{ strpos(Request::route()->getName(),'users') !== false ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(),'users') !== false ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'users') !== false ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ strpos(Request::route()->getName(), 'users') !== false ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
                             Users
                             <i class="right fas fa-angle-left"></i>
@@ -61,6 +62,33 @@
                     </ul>
                 </li>
                 {{-- End Users --}}
+
+                {{-- Blogs --}}
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'blogs') !== false ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ strpos(Request::route()->getName(), 'blogs') !== false ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-blog"></i>
+                        <p>
+                            Blogs
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.blogs') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Blog</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.blogs') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Blog</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Blogs --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

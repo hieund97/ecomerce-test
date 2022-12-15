@@ -38,7 +38,8 @@
                                         <label for="name">Name</label>
                                         <input type="text"
                                             class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                            id="name" name="name" placeholder="Enter name" />
+                                            id="name" name="name" value="{{ old('name') ?? '' }}"
+                                            placeholder="Enter name" />
                                         @if ($errors->has('name'))
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $errors->first('name') }}

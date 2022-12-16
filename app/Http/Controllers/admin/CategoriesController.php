@@ -16,15 +16,8 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        //Pagination
-        $perPage = 5;
-        $page = $request->has('page') ? $request->page : 1;
-        $startAt = $perPage * ($page - 1);
-
-        $aryCategories = Categories::limit($perPage)->offset($startAt)->get();
-
-        $totalPages = ceil(Categories::all()->count() / $perPage);
-        return view('admin.categories.list', compact('aryCategories','perPage','page','startAt','totalPages'));
+        $aryCategories = Categories::paginate(5);
+        return view('admin.categories.list', compact('aryCategories'));
     }
 
     /**

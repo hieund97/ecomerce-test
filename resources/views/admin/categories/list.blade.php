@@ -61,19 +61,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        <ul class="pagination pagination-sm m-0 float-right">
-                            @if ($page > 1 )
-                            <li class="page-item"><a class="page-link" href="{{ route('list.categories') }}?page={{$page - 1}}">&laquo;</a></li>
-                            @endif
-                            @for ($i = 1; $i <= $totalPages; $i++)
-                                <li class="page-item"><a class="page-link" href="{{ route('list.categories') }}?page={{$i}}">{{ $i }}</a></li>
-                            @endfor
-                            @if ($page < $totalPages)
-                            <li class="page-item"><a class="page-link" href="{{ route('list.categories') }}?page={{$page + 1}}">&raquo;</a></li>
-                            @endif
-                        </ul>
-                      </div>
+                    {{ $aryCategories->links('vendor.pagination.list') }}
                 </div>
                 <!-- /.card -->
             </div>

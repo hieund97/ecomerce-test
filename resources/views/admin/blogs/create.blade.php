@@ -48,8 +48,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="detail">Detail</label>
-                                        <textarea id="detail" class="form-control {{ $errors->has('detail') ? 'is-invalid' : '' }}" style="height: 300px"
+                                        <textarea id="blog_detail" class="form-control {{ $errors->has('detail') ? 'is-invalid' : '' }}" style="height: 300px"
                                             name="detail" placeholder="Enter detail"></textarea>
+
                                         @if ($errors->has('detail'))
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $errors->first('detail') }}
@@ -83,3 +84,8 @@
     </div>
     <!-- /.content-wrapper -->
 @endsection
+@push('js')
+    <script>
+        CKEDITOR.replace('blog_detail');
+    </script>
+@endpush

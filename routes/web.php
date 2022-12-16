@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\BlogsController;
+use App\Http\Controllers\admin\CategoriesController;
 use App\Http\Controllers\admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +46,17 @@ Route::group([
         Route::put('/update/{id}', 'BlogsController@update')->name('update.blogs');
         Route::delete('/delete/{id}', 'BlogsController@destroy')->name('delete.blogs');
     });
-
+    // Route categories
+    Route::group([
+        'prefix' => 'categories'
+    ], function(){
+        Route::get('/', 'CategoriesController@index')->name('list.categories');
+        Route::get('/create', 'CategoriesController@create')->name('create.categories');
+        Route::post('/store', 'CategoriesController@store')->name('store.categories');
+        Route::get('/edit/{id}', 'CategoriesController@edit')->name('edit.categories');
+        Route::put('/update/{id}', 'CategoriesController@update')->name('update.categories');
+        Route::delete('/delete/{id}', 'CategoriesController@destroy')->name('delete.categories');
+    });
 });
 
 

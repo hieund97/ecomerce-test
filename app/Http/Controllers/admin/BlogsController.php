@@ -40,10 +40,12 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make(
-            $request->all(),[
+            $request->all(),
+            [
                 'name' => 'required|max:255|min:3',
                 'detail' => 'required|min:3',
-            ],[
+            ],
+            [
                 'required' => 'Must be filled!',
                 'min' => 'At least :min characters!',
             ]
@@ -61,17 +63,6 @@ class BlogsController extends Controller
         ]);
         session()->flash('create_complete', 'success');
         return redirect(route('list.blogs'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -96,12 +87,12 @@ class BlogsController extends Controller
     public function update(Request $request, $id)
     {
         $blog = Blogs::find($id);
-        if($blog){
+        if ($blog) {
             $blog->update([
                 'name' => $request->name,
                 'slug' => $request->slug,
                 'detail' => $request->detail,
-                'status'=> $request->status
+                'status' => $request->status
             ]);
             session()->flash('edit_complete', 'success');
             return redirect(route('list.blogs'));
@@ -119,7 +110,7 @@ class BlogsController extends Controller
     public function destroy($id)
     {
         $blog = Blogs::find($id);
-        if($blog){
+        if ($blog) {
             $blog->delete();
             session()->flash('delete_complete', 'success');
             return redirect(route('list.blogs'));

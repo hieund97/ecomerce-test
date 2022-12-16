@@ -40,7 +40,7 @@
                                         <input type="text" class="form-control" id="name" name="name"
                                             value="{{ $blog->name }}" placeholder="Enter name" />
                                         @if ($errors->has('name'))
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 {{ $errors->first('name') }}
                                             </div>
                                         @endif
@@ -54,7 +54,7 @@
                                         <label for="detail">Detail</label>
                                         <textarea id="detail" class="form-control" style="height: 300px" name="detail" placeholder="Enter detail">{{ $blog->detail }}</textarea>
                                         @if ($errors->has('detail'))
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 {{ $errors->first('detail') }}
                                             </div>
                                         @endif

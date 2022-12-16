@@ -61,7 +61,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    {{ $aryCategories->links('vendor.pagination.list') }}
+                    {{ $aryCategories->links('admin.partials.pagination') }}
                 </div>
                 <!-- /.card -->
             </div>

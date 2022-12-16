@@ -13,12 +13,13 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
             $table->integer('parent_id')->default(0);
             $table->integer('status')->default(1)->comment('0: off, 1: on');
+            $table->integer('type')->default(0)->comment('0: product, 1: blog');
             $table->timestamps();
         });
     }

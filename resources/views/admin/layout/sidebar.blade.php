@@ -89,6 +89,33 @@
                     </ul>
                 </li>
                 {{-- End Blogs --}}
+
+                {{-- Categories --}}
+                <li class="nav-item">
+                    <a href="#"
+                        class="nav-link">
+                        <i class="nav-icon fas fa-bars"></i>
+                        <p>
+                            Categories
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.categories') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Category</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.categories') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Category</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Categories --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

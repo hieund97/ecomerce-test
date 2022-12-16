@@ -61,15 +61,21 @@
                                     <tr>
                                         <td>{{ $blog->id }}</td>
                                         <td> {{ $blog->name }}</td>
-                                        <td>{{ $blog->detail }}</td>
+                                        <td>{{ $blog->description }}</td>
                                         <td>
-                                            @if ($blog->status == 0)
-                                                {{ 'Unapproved' }}
-                                            @elseif($blog->status == 1)
-                                                {{ 'Approving' }}
-                                            @elseif($blog->status == 2)
-                                                {{ 'Approved' }}
-                                            @endif
+                                            @switch($blog->status == 0)
+                                                @case(0)
+                                                    {{ 'Unapproved' }}
+                                                @break
+                                                @case(1)
+                                                    {{ 'Approving' }}
+                                                @break
+                                                @case(2)
+                                                    {{ 'Approved' }}
+                                                @break
+                                                @default
+                                            @endswitch
+
                                         </td>
                                         <td>
                                             <a href="{{ route('edit.blogs', $blog->id) }}" class="btn btn-primary"><i

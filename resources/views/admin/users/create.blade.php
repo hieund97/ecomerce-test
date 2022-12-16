@@ -32,23 +32,27 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }} " name="name" id="name"
-                                            placeholder="Enter name" value="{{ old('name') ?? '' }}">
+                                        <input type="text"
+                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }} "
+                                            name="name" id="name" placeholder="Enter name"
+                                            value="{{ old('name') ?? '' }}">
                                         @if ($errors->has('name'))
-                                        <div id="validationServer03Feedback" class="invalid-feedback">
-                                            {{ $errors->first('name') }}
-                                        </div>
+                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                                {{ $errors->first('name') }}
+                                            </div>
                                         @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email address</label>
-                                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" id="email"
-                                            placeholder="Enter email" value="{{ old('email') ?? '' }}">
-                                            @if ($errors->has('email'))
+                                        <input type="email"
+                                            class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                            name="email" id="email" placeholder="Enter email"
+                                            value="{{ old('email') ?? '' }}">
+                                        @if ($errors->has('email'))
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $errors->first('email') }}
                                             </div>
-                                            @endif
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="status">Status</label>
@@ -59,23 +63,25 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Password</label>
-                                        <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" name="password"
-                                            id="password" placeholder="Password">
-                                            @if ($errors->has('password'))
+                                        <input type="password"
+                                            class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                            name="password" id="password" placeholder="Password">
+                                        @if ($errors->has('password'))
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $errors->first('password') }}
                                             </div>
-                                            @endif
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Re-password</label>
-                                        <input type="password" class="form-control {{ $errors->has('re_password') ? 'is-invalid' : '' }}" name="re_password"
-                                            id="re_password" placeholder="Re-password">
-                                            @if ($errors->has('re_password'))
+                                        <input type="password"
+                                            class="form-control {{ $errors->has('re_password') ? 'is-invalid' : '' }}"
+                                            name="re_password" id="re_password" placeholder="Re-password">
+                                        @if ($errors->has('re_password'))
                                             <div id="validationServer03Feedback" class="invalid-feedback">
                                                 {{ $errors->first('re_password') }}
                                             </div>
-                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                                 <!-- /.card-body -->

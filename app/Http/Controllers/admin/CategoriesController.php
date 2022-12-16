@@ -14,11 +14,17 @@ class CategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        //Pagination
+        $perPage = 5;
+        $page = $request->has('page') ? $request->page : 1;
+        $startAt = $perPage * ($page - 1);
 
-        $aryCategories = Categories::all();
-        return view('admin.categories.list', compact('aryCategories'));
+        $aryCategories = Categories::limit($perPage)->offset($startAt)->get();
+
+        $totalPages = ceil(Categories::all()->count() / $perPage);
+        return view('admin.categories.list', compact('aryCategories','perPage','page','startAt','totalPages'));
     }
 
     /**
@@ -59,7 +65,7 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { 
+    {
         $aryCategories = Categories::all();
         $category = Categories::findOrFail($id);
         return view('admin.categories.edit', compact('category', 'aryCategories'));
@@ -75,7 +81,7 @@ class CategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $category = Categories::find($id);
-        if($category){
+        if ($category) {
             $category->update([
                 'name' => $request->name,
                 'parent_id' => $request->parent_id,

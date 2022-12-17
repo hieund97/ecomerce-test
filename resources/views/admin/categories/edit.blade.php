@@ -40,8 +40,15 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="text" class="form-control " id="name" name="name"
-                                             placeholder="Enter name" value="{{ $category->name }}"/>
+                                            <input type="text"
+                                                class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                                id="name" name="name" placeholder="Enter name"
+                                                value="{{ $category->name }}" />
+                                            @if ($errors->has('name'))
+                                                <div id="nameFeedback" class="invalid-feedback">
+                                                    {{ $errors->first('name') }}
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -49,9 +56,13 @@
                                                 <div class="form-group">
                                                     <label>Parent Category</label>
                                                     <select class="form-control" name="parent_id">
-                                                        <option value="0" {{ $category->parent_id == 0 ? 'selected' : ''}}>Default Category</option>
+                                                        <option value="0"
+                                                            {{ $category->parent_id == 0 ? 'selected' : '' }}>Default
+                                                            Category</option>
                                                         @foreach ($aryCategories as $categories)
-                                                            <option {{ $category->parent_id == $categories->id ? 'selected' : ''}} value='{{ $categories->id }}'>{{ $categories->name }}
+                                                            <option
+                                                                {{ $category->parent_id == $categories->id ? 'selected' : '' }}
+                                                                value='{{ $categories->id }}'>{{ $categories->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -64,8 +75,10 @@
                                                 <div class="form-group">
                                                     <label>Type</label>
                                                     <select class="form-control" name="type">
-                                                        <option {{ $category->type == 0 ? 'selected' : ''}} value='0'>Product</option>
-                                                        <option {{ $category->type == 1 ? 'selected' : ''}} value='1'>Blog</option>
+                                                        <option {{ $category->type == 0 ? 'selected' : '' }} value='0'>
+                                                            Product</option>
+                                                        <option {{ $category->type == 1 ? 'selected' : '' }} value='1'>
+                                                            Blog</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -74,8 +87,10 @@
                                                 <div class="form-group">
                                                     <label>Status</label>
                                                     <select class="form-control" name="status">
-                                                        <option {{ $category->status == 0 ? 'selected' : ''}} value="0">Off</option>
-                                                        <option {{ $category->status == 1 ? 'selected' : ''}} value="1">On</option>
+                                                        <option {{ $category->status == 0 ? 'selected' : '' }}
+                                                            value="0">Off</option>
+                                                        <option {{ $category->status == 1 ? 'selected' : '' }}
+                                                            value="1">On</option>
                                                     </select>
                                                 </div>
                                             </div>

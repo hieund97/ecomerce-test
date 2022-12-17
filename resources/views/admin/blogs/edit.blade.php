@@ -37,8 +37,10 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                            value="{{ $blog->name }}" placeholder="Enter name" />
+                                        <input type="text"
+                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            id="name" name="name" value="{{ $blog->name }}"
+                                            placeholder="Enter name" />
                                         @if ($errors->has('name'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('name') }}
@@ -46,13 +48,40 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
+                                        <label for="description">Descrition</label>
+                                        <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" id="description" name="description"
+                                            placeholder="Enter description">{{ $blog->description }} </textarea>
+                                            @if ($errors->has('description'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('description') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select class="form-control" name="category_id">
+                                            @foreach ($aryCategories as $categories)
+                                                <option value='{{ $categories->id }}'>{{ $categories->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="slug">Slug</label>
-                                        <input type="text" class="form-control" id="slug" name="slug"
-                                            value="{{ $blog->slug }}" placeholder="Enter slug" />
+                                        <input type="text"
+                                            class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}"
+                                            id="slug" name="slug" value="{{ $blog->slug }}"
+                                            placeholder="Enter slug" />
+                                            @if ($errors->has('slug'))
+                                            <div id="slugFeedback" class="invalid-feedback">
+                                                {{ $errors->first('slug') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="detail">Detail</label>
-                                        <textarea id="detail" class="form-control" style="height: 300px" name="detail" placeholder="Enter detail">{{ $blog->detail }}</textarea>
+                                        <textarea id="blog_detail" class="form-control {{ $errors->has('detail') ? 'is-invalid' : '' }}" style="height: 300px"
+                                            name="detail" placeholder="Enter detail">{{ $blog->detail }}</textarea>
                                         @if ($errors->has('detail'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('detail') }}
@@ -89,3 +118,8 @@
     </div>
     <!-- /.content-wrapper -->
 @endsection
+@push('js')
+    <script>
+        CKEDITOR.replace('blog_detail');
+    </script>
+@endpush

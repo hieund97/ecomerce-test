@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Categories;
 
 class Blogs extends Model
 {
@@ -17,4 +18,14 @@ class Blogs extends Model
     protected $fillable = [
         'name', 'slug', 'detail', 'status', 'category_id', 'description'
     ];
+
+    /**
+     * Get the user that owns the Blogs
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function categories()
+    {
+        return $this->belongsTo(Categories::class, 'category_id', 'id');
+    }
 }

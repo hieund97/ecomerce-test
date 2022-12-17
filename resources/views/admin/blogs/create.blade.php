@@ -41,18 +41,36 @@
                                             id="name" name="name" value="{{ old('name') ?? '' }}"
                                             placeholder="Enter name" />
                                         @if ($errors->has('name'))
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <div id="nameFeedback" class="invalid-feedback">
                                                 {{ $errors->first('name') }}
                                             </div>
                                         @endif
                                     </div>
                                     <div class="form-group">
+                                        <label for="description">Descrition</label>
+                                        <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" id="description" name="description"
+                                            placeholder="Enter description"> </textarea>
+                                        @if ($errors->has('description'))
+                                            <div id="descriptionFeedback" class="invalid-feedback">
+                                                {{ $errors->first('description') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select class="form-control" name="category_id">
+                                            @foreach ($aryCategories as $categories)
+                                                <option value='{{ $categories->id }}'>{{ $categories->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="detail">Detail</label>
                                         <textarea id="blog_detail" class="form-control {{ $errors->has('detail') ? 'is-invalid' : '' }}" style="height: 300px"
                                             name="detail" placeholder="Enter detail"></textarea>
-
                                         @if ($errors->has('detail'))
-                                            <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <div id="detailFeedback" class="invalid-feedback">
                                                 {{ $errors->first('detail') }}
                                             </div>
                                         @endif

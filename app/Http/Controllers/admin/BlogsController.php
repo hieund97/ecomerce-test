@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blogs;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -17,7 +18,9 @@ class BlogsController extends Controller
      */
     public function index()
     {
-        $aryBlog = Blogs::select(['id', 'name', 'detail', 'status'])->limit(10)->get();
+        
+        // $aryBlog = Blogs::join('categories', 'blogs.category_id', 'categories.id')->select('blogs.*', 'categories.id as cate_id', 'categories.name as cate_name')->get();
+        $aryBlog = Blogs::with('categories')->paginate(5);
         return view('admin.blogs.list', compact('aryBlog'));
     }
 
@@ -28,7 +31,8 @@ class BlogsController extends Controller
      */
     public function create()
     {
-        return view('admin/blogs/create');
+        $aryCategories = Categories::where('type', 1)->get();
+        return view('admin/blogs/create', compact('aryCategories'));
     }
 
     /**
@@ -44,10 +48,12 @@ class BlogsController extends Controller
             [
                 'name' => 'required|max:255|min:3',
                 'detail' => 'required|min:3',
+                'description' => 'required|min:3|max:255',
             ],
             [
                 'required' => 'Must be filled!',
                 'min' => 'At least :min characters!',
+                'max' => 'Too long!'
             ]
         );
 
@@ -60,6 +66,8 @@ class BlogsController extends Controller
             'slug' => Str::slug($request->name, '-'),
             'detail' => $request->detail,
             'status' => $request->status,
+            'category_id' => $request->category_id,
+            'description' => $request->description,
         ]);
         session()->flash('create_complete', 'success');
         return redirect(route('list.blogs'));
@@ -73,8 +81,9 @@ class BlogsController extends Controller
      */
     public function edit($id)
     {
+        $aryCategories = Categories::where('type', 1)->get();
         $blog = Blogs::find($id);
-        return view('admin.blogs.edit', compact('blog'));
+        return view('admin.blogs.edit', compact('blog', 'aryCategories'));
     }
 
     /**
@@ -86,6 +95,25 @@ class BlogsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|max:255|min:3',
+                'detail' => 'required|min:3',
+                'description' => 'required|min:3|max:255',
+                'slug' => 'required|min:3|max:255',
+            ],
+            [
+                'required' => 'Must be filled!',
+                'min' => 'At least :min characters!',
+                'max' => 'Too long!'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect(route('edit.blogs', $id))->withErrors($validator)->withInput();
+        }
+
         $blog = Blogs::find($id);
         if ($blog) {
             $blog->update([

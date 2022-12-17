@@ -16,7 +16,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $aryUser = User::select(['id', 'name', 'email', 'status'])->limit(10)->get();
+        $aryUser = User::paginate(5);
         return view('admin/users/list', compact('aryUser'));
     }
 

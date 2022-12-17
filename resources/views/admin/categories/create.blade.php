@@ -39,8 +39,14 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="text" class="form-control " id="name" name="name"
-                                             placeholder="Enter name" />
+                                            <input type="text"
+                                                class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                                id="name" name="name" placeholder="Enter name" />
+                                            @if ($errors->has('name'))
+                                                <div id="nameFeedback" class="invalid-feedback">
+                                                    {{ $errors->first('name') }}
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -50,7 +56,7 @@
                                                     <select class="form-control" name="parent_id">
                                                         <option value="0">Default Category</option>
                                                         @foreach ($aryCategories as $categories)
-                                                            <option  value='{{ $categories->id }}'>{{ $categories->name }}
+                                                            <option value='{{ $categories->id }}'>{{ $categories->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>

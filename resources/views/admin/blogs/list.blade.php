@@ -51,7 +51,8 @@
                                 <tr>
                                     <th width='10%'>ID</th>
                                     <th width='20%'>Name</th>
-                                    <th width='40%'>Detail</th>
+                                    <th width='20%'>Category</th>
+                                    <th width='20%'>Description</th>
                                     <th width='20%'>Status</th>
                                     <th width='10%'>Action</th>
                                 </tr>
@@ -61,6 +62,7 @@
                                     <tr>
                                         <td>{{ $blog->id }}</td>
                                         <td> {{ $blog->name }}</td>
+                                        <td>{{ $blog->categories->name }}</td>
                                         <td>{{ $blog->description }}</td>
                                         <td>
                                             @switch($blog->status == 0)
@@ -94,6 +96,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
+                    {{$aryBlog->links('admin.partials.pagination')}}
                 </div>
                 <!-- /.card -->
             </div>

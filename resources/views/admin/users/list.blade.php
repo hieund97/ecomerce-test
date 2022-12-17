@@ -78,6 +78,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
+                    {{$aryUser->links('admin.partials.pagination')}}
                 </div>
                 <!-- /.card -->
             </div>
@@ -85,3 +86,4 @@
     </div>
     <!-- /.content-wrapper -->
 @endsection
+

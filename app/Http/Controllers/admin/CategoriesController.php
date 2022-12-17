@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
@@ -46,6 +47,18 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        $valiadator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:255'
+        ], 
+        [
+            'required' => 'Must be filled!',
+            'min' => 'At least :min characters!',
+            'max' => 'Too long!'
+        ]);
+        if($valiadator->fails()){
+            return redirect(route('create.categories'))->withErrors($valiadator)->withInput();
+        }
+
         Categories::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name, '-'),
@@ -53,7 +66,9 @@ class CategoriesController extends Controller
             'status' => $request->status,
             'type' => $request->type,
         ]);
+        
 
+        session()->flash('edit_success', 'success');
         return redirect(route('list.categories'));
     }
 
@@ -80,7 +95,20 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Categories::find($id);
+        $category = Categories::findOrFail($id);
+        $valiadator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:255'
+        ], 
+        [
+            'required' => 'Must be filled!',
+            'min' => 'At least :min characters!',
+            'max' => 'Too long!'
+        ]);
+
+        if($valiadator->fails()){
+            return redirect(route('edit.categories', $id))->withErrors($valiadator)->withInput();
+        }
+
         if ($category) {
             $category->update([
                 'name' => $request->name,

@@ -57,6 +57,27 @@ Route::group([
         Route::put('/update/{id}', 'CategoriesController@update')->name('update.categories');
         Route::delete('/delete/{id}', 'CategoriesController@destroy')->name('delete.categories');
     });
+    // Route attribute types
+    Route::group([
+        'prefix' => 'attributes'
+    ], function(){
+        Route::get('/type', 'AttributesController@index')->name('list.attributeTypes');
+        Route::post('/type/store', 'AttributesController@store')->name('store.attributeTypes');
+        Route::get('/type/edit/{id}', 'AttributesController@edit')->name('edit.attributeTypes');
+        Route::put('/type/update/{id}', 'AttributesController@update')->name('update.attributeTypes');
+        Route::delete('/type/delete/{id}', 'AttributesController@destroy')->name('delete.attributeTypes');
+    });
+
+    // Route attribute values
+    Route::group([
+        'prefix' => 'attributes'
+    ], function(){
+        Route::get('/value', 'AttributeValuesController@index')->name('list.attributeValues');
+        Route::post('/value/store', 'AttributeValuesController@store')->name('store.attributeValues');
+        Route::get('/value/edit/{id}', 'AttributeValuesController@edit')->name('edit.attributeValues');
+        Route::put('/value/update/{id}', 'AttributeValuesController@update')->name('update.attributeValues');
+        Route::delete('/value/delete/{id}', 'AttributeValuesController@destroy')->name('delete.attributeValues');
+    });
 });
 
 

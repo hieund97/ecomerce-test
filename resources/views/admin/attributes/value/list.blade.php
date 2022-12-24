@@ -43,7 +43,7 @@
                                             <tr>
                                                 <td>{{ $value->id }}</td>
                                                 <td>{{ $value->name }}</td>
-                                                <td></td>
+                                                <td>{{--{{ $value->attributes->name }}--}}</td>
                                                 <td>
                                                     <a href="{{ route('edit.attributeValues', $value->id) }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i></a>

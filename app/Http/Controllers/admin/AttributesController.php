@@ -34,7 +34,7 @@ class AttributesController extends Controller
                 'name' => 'max:255|min:3'
             ],
             [
-                'max' => 'Name is too long!',
+                'max' => 'Name is too long! (max: 255 characters)',
                 'min' => 'Name is too short!'
             ]
         );
@@ -78,7 +78,7 @@ class AttributesController extends Controller
                 'name' => 'max:255|min:3'
             ],
             [
-                'max' => 'Name is too long!',
+                'max' => 'Name is too long! (max: 255 characters)',
                 'min' => 'Name is too short!'
             ]
         );

@@ -42,19 +42,19 @@
                         class="nav-link {{ strpos(Request::route()->getName(), 'users') !== false ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Users
+                            User
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('list.users') }}" class="nav-link">
+                            <a href="{{ route('list.users') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.users') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List User</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('create.users') }}" class="nav-link">
+                            <a href="{{ route('create.users') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.users') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create User</p>
                             </a>
@@ -69,19 +69,19 @@
                         class="nav-link {{ strpos(Request::route()->getName(), 'blogs') !== false ? 'active' : '' }}">
                         <i class="nav-icon fas fa-blog"></i>
                         <p>
-                            Blogs
+                            Blog
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('list.blogs') }}" class="nav-link">
+                            <a href="{{ route('list.blogs') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.blogs') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Blog</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('create.blogs') }}" class="nav-link">
+                            <a href="{{ route('create.blogs') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.blogs') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create Blog</p>
                             </a>
@@ -91,24 +91,23 @@
                 {{-- End Blogs --}}
 
                 {{-- Categories --}}
-                <li class="nav-item">
-                    <a href="#"
-                        class="nav-link">
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'categories') !== false ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(), 'categories') !== false ? 'active' : '' }}">
                         <i class="nav-icon fas fa-bars"></i>
                         <p>
-                            Categories
+                            Category
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('list.categories') }}" class="nav-link">
+                            <a href="{{ route('list.categories') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.categories') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List Category</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('create.categories') }}" class="nav-link">
+                            <a href="{{ route('create.categories') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.categories') !== false ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create Category</p>
                             </a>
@@ -116,6 +115,32 @@
                     </ul>
                 </li>
                 {{-- End Categories --}}
+
+                {{-- Attributes --}}
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'attributeTypes') || strpos(Request::route()->getName(), 'attributeValues')  !== false ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(), 'attributeTypes') || strpos(Request::route()->getName(), 'attributeValues') !== false ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-window-restore"></i>
+                        <p>
+                            Attribute
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.attributeTypes') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.attributeTypes') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Attribute Type </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('list.attributeValues') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.attributeValues') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Attribute Value</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Attributes --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

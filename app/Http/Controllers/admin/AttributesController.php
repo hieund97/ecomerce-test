@@ -35,7 +35,7 @@ class AttributesController extends Controller
             ],
             [
                 'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short!'
+                'min' => 'Name is too short! (min: 3 characters)'
             ]
         );
         if ($validator->fails()) {
@@ -79,7 +79,7 @@ class AttributesController extends Controller
             ],
             [
                 'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short!'
+                'min' => 'Name is too short! (min: 3 characters)'
             ]
         );
         if ($validator->fails()) {

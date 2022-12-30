@@ -19,13 +19,12 @@ class AttributeValues extends Model
         'name', 'attribute_id'
     ];
     
-
     /**
      * Get the user that owns the Blogs
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function attributes()
+    public function attributesType()
     {
         return $this->belongsTo(AttributeTypes::class, 'attribute_id', 'id');
     }

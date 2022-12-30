@@ -24,7 +24,7 @@ class AttributeTypes extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function attributes()
+    public function attributesValue()
     {
         return $this->hasMany(AttributeValues::class, 'attribute_id', 'id');
     }

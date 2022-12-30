@@ -17,9 +17,9 @@ class AttributeValuesController extends Controller
      */
     public function index()
     {
-        $aryAttributeValues = AttributeValues::with('attributes')->paginate(5);
+        $aryAttributeValues = AttributeValues::with('attributesType')->paginate(5);
         $aryAttributeTypes = AttributeTypes::all();
-        return view('admin.attributes.value.list', compact('aryAttributeTypes', 'aryAttributeValues'));
+        return view('admin.attributes.value.list', compact('aryAttributeValues', 'aryAttributeTypes'));
     }
 
     /**
@@ -37,7 +37,7 @@ class AttributeValuesController extends Controller
             ],
             [
                 'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short!'
+                'min' => 'Name is too short! (min: 3 characters)'
             ]
         );
         if ($validator->fails()) {
@@ -82,7 +82,7 @@ class AttributeValuesController extends Controller
             ],
             [
                 'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short!'
+                'min' => 'Name is too short! (min: 3 characters)'
             ]
         );
         if ($validator->fails()) {

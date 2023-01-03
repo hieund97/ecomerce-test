@@ -78,6 +78,15 @@ Route::group([
         Route::put('/value/update/{id}', 'AttributeValuesController@update')->name('update.attributeValues');
         Route::delete('/value/delete/{id}', 'AttributeValuesController@destroy')->name('delete.attributeValues');
     });
+
+    // Route products
+    Route::group([
+        'prefix' => 'products'
+    ], function(){
+        Route::get('/', 'ProductsController@index')->name('list.products');
+        Route::get('/create', 'ProductsController@create')->name('create.products');
+        Route::post('/store', 'ProductsController@store')->name('store.products');
+    });
 });
 
 

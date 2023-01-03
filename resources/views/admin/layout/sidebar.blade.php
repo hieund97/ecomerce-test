@@ -141,6 +141,32 @@
                     </ul>
                 </li>
                 {{-- End Attributes --}}
+
+                {{-- Products --}}
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'products') !== false ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(), 'products') !== false ? 'active' : '' }}">
+                        <i class="nav-icon fab fa-product-hunt"></i>
+                        <p>
+                            Products
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.products') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.products') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Products</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.products') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.products') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Product</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Products --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

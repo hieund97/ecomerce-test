@@ -86,6 +86,9 @@ Route::group([
         Route::get('/', 'ProductsController@index')->name('list.products');
         Route::get('/create', 'ProductsController@create')->name('create.products');
         Route::post('/store', 'ProductsController@store')->name('store.products');
+        Route::get('/edit/{id}', 'ProductsController@edit')->name('edit.products');
+        Route::put('/update/{id}', 'ProductsController@update')->name('update.products');
+        Route::delete('/delete/{id}', 'ProductsController@destroy')->name('delete.products');
     });
 });
 

@@ -45,16 +45,19 @@
                                     <tr>
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ $product->price }}</td>
-                                        <td></td>
+                                        <td>{{ $product->price }}$</td>
+                                        <td>
+                                            @foreach ($product->categories as $cate)
+                                                {{ $cate->name }}
+                                            @endforeach
+                                        </td>
                                         <td>{{ $product->status }}</td>
-                                        <td><img width="150" height="150" src="{{ asset('storage/images/products/'.$product->image) }}"></td>
+                                        <td><img width="150" height="150"
+                                                src="{{ asset('storage/images/products/'.$product->image) }}"></td>
                                         <td>{{ $product->description }}</td>
                                         <td>
-                                            <a href="" class="btn btn-primary"><i
-                                                    class="fas fa-edit"></i></a>
-                                            <form style="display: inline" action=""
-                                                method="POST">
+                                            <a href="{{ route('edit.products', $product->id) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                            <form style="display: inline" action="" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger"><i
@@ -67,7 +70,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    {{$aryProduct->links('admin.partials.pagination')}}
+                    {{ $aryProduct->links('admin.partials.pagination') }}
                 </div>
                 <!-- /.card -->
             </div>

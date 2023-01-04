@@ -71,7 +71,6 @@ class ProductsController extends Controller
 
             ]);
 
-
             // Attach Category
             $product->categories()->attach($request->category);
 
@@ -105,17 +104,6 @@ class ProductsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -123,7 +111,15 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Products::findOrFail($id);
+        // dd($product->categories->id);
+        // foreach ($product->attribute_value as $key => $value) {
+        //     $flag[] = $value->id;
+        // }
+        // dd($flag);
+        $aryAttributeType = AttributeTypes::with('attributesValue')->get();
+        $aryCategory = Categories::all();
+        return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product'));
     }
 
     /**

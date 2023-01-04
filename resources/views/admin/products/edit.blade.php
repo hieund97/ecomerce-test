@@ -1,5 +1,5 @@
 @extends('admin.layout.main')
-@section('title', 'Create Products')
+@section('title', 'Edit Products')
 @section('content')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -8,25 +8,26 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Create Products</h1>
+                        <h1>Edit Products</h1>
                     </div>
 
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Create Products</li>
+                            <li class="breadcrumb-item active">Edit Products</li>
                         </ol>
                     </div>
                 </div>
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             {{$errors->first()}}
                         </div>
-                @endif
+                @endif --}}
             </div><!-- /.container-fluid -->
         </section>
 
-        <form action="{{ route('store.products') }}" method='POST' enctype="multipart/form-data" style="display:inline">
+        <form action="{{ route('update.products'), $product->id }}" method='POST' enctype="multipart/form-data" style="display:inline">
+            @method('PUT')
             @csrf
             <div class="card col-12 col-md-12 col-lg-12 ">
                 {{-- Left --}}
@@ -35,21 +36,21 @@
                     <div class="col-9">
                         <div class="form-group">
                             <label>Name</label>
-                            <input class="form-control" name="name" id="name" placeholder="Name">
+                            <input class="form-control" name="name" id="name" placeholder="Name"
+                                value="{{ $product->name }}">
                         </div>
                         <div class="form-group">
                             <label for="detail">Description</label>
                             <textarea id="description" class="form-control" cols="50" rows="3" name="description"
-                                placeholder="Enter describtion"></textarea>
+                                placeholder="Enter describtion">{{ $product->description }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="detail">Detail</label>
                             <textarea id="product_detail" class="form-control" cols="50" rows="10" name="details"
-                                placeholder="Enter detail"></textarea>
+                                placeholder="Enter detail">{{ $product->details }}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Attribute</label>
-                            <a class="float-right" href="{{ route('list.attributeTypes') }}">Add new attribute</a>
                             <div class="card-header p-0 pt-1 border-bottom-0">
                                 <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
                                     @foreach ($aryAttributeType as $key => $type)
@@ -92,24 +93,28 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label for="password">SKU</label>
-                            <input class="form-control" name="sku" id="sku" placeholder="SKU">
+                            <input class="form-control" name="sku" id="sku" placeholder="SKU"
+                                value="{{ $product->sku }}">
                         </div>
                         <div class="form-group">
                             <label for="password">Price($)</label>
-                            <input class="form-control" name="price" id="price" placeholder="Price">
+                            <input class="form-control" name="price" id="price" placeholder="Price"
+                                value="{{ $product->price }}">
                         </div>
                         <div class="form-group">
                             <label for="password">Quantity</label>
                             <input type="number" class="form-control" name="quantity" id="quantity"
-                                placeholder="quantity">
+                                value="{{ $product->quantity }}" placeholder="quantity">
                         </div>
                         <div class="form-group">
                             <label>Category</label>
                             <div class='scroll-category'>
                                 @foreach ($aryCategory as $category)
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input " name="category[]" type="checkbox"
-                                            id="{{ $category->name }}_{{ $category->id }}" value="{{ $category->id }}" />
+                                        <input class="custom-control-input" name="category[]" type="checkbox"
+                                            id="{{ $category->name }}_{{ $category->id }}" value="{{ $category->id }}"
+                                            @foreach ($product->categories as $cate)
+                                                {{ $cate->id == $category->id ? 'checked' : '' }} @endforeach />
                                         <label for="{{ $category->name }}_{{ $category->id }}"
                                             class="custom-control-label">{{ $category->name }}</label>
                                     </div>

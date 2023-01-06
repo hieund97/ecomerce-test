@@ -114,11 +114,6 @@ class ProductsController extends Controller
     {
         $product = Products::findOrFail($id);
         $aryProduct = Products::select('id', 'name')->get();
-        // dd($product->categories->id);
-        // foreach ($product->attribute_value as $key => $value) {
-        //     $flag[] = $value->id;
-        // }
-        // dd($flag);
         $aryAttributeType = AttributeTypes::with('attributesValue')->get();
         $aryCategory = Categories::all();
         return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product', 'aryProduct'));

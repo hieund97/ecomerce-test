@@ -33,11 +33,10 @@ class AttributeValuesController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'max:255|min:3'
+                'name' => 'required'
             ],
             [
-                'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short! (min: 3 characters)'
+                'required' => ':attribute must be filled',
             ]
         );
         if ($validator->fails()) {
@@ -78,11 +77,10 @@ class AttributeValuesController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'max:255|min:3'
+                'name' => 'required'
             ],
             [
-                'max' => 'Name is too long! (max: 255 characters)',
-                'min' => 'Name is too short! (min: 3 characters)'
+                'required' => ':attribute must be filled',
             ]
         );
         if ($validator->fails()) {

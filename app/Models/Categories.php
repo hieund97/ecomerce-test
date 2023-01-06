@@ -24,8 +24,19 @@ class Categories extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function categories()
+    public function blogs()
     {
         return $this->hasMany(Blogs::class, 'category_id', 'id');
     }
+
+    /**
+     * The products that belong to the Categories
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Products::class, 'product_category_pivot', 'category_id', 'product_id');
+    }
+    
 }

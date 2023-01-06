@@ -62,7 +62,7 @@
                                     <tr>
                                         <td>{{ $blog->id }}</td>
                                         <td> {{ $blog->name }}</td>
-                                        <td>{{ $blog->categories->name }}</td>
+                                        <td>{{ $blog->categories['name'] }}</td>
                                         <td>{{ $blog->description }}</td>
                                         <td>
                                             @switch($blog->status == 0)

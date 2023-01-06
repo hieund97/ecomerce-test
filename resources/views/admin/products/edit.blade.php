@@ -26,7 +26,8 @@
             </div><!-- /.container-fluid -->
         </section>
 
-        <form action="{{ route('update.products'), $product->id }}" method='POST' enctype="multipart/form-data" style="display:inline">
+        <form action="{{ route('update.products', $product->id) }}" method='POST' enctype="multipart/form-data"
+            style="display:inline">
             @method('PUT')
             @csrf
             <div class="card col-12 col-md-12 col-lg-12 ">
@@ -72,10 +73,13 @@
                                             <div class="row">
                                                 @foreach ($type->attributesValue as $value)
                                                     <div class="col-2 custom-control custom-checkbox">
+                                                        @foreach ($product->attribute_value as $valueProd)
                                                         <input class="custom-control-input "
+                                                        {{ $valueProd->id == $value->id ? 'checked' : '' }}
                                                             name="attribute_value[{{ $type->id }}][]" type="checkbox"
                                                             value="{{ $value->id }}"
                                                             id="{{ $value->name . '_' . $value->id }}" />
+                                                        @endforeach
                                                         <label for="{{ $value->name . '_' . $value->id }}"
                                                             class="custom-control-label">{{ $value->name }}</label>
                                                     </div>
@@ -125,35 +129,38 @@
                             <label>Related product</label>
                             <select class="related_product" multiple="multiple" data-placeholder="Select a State"
                                 style="width: 100%;">
-                                <option>Alabama</option>
-                                <option>Alaska</option>
+                                @foreach ($aryProduct as $prd)
+                                    @foreach (explode(',', $product->related_product_id) as $item)
+                                        <option {{ $item == $prd->id ? 'selected' : '' }} value="{{ $prd->id }}">{{ $prd->name }}</option>
+                                    @endforeach
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select class="form-control" name="status">
-                                <option value="1">On</option>
-                                <option value="2">Off</option>
+                                <option {{ $product->status == 1 ? 'selected' : '' }} value="1">On</option>
+                                <option {{ $product->status == 2 ? 'selected' : '' }} value="2">Off</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" value='1' id="new_product"
-                                    name='is_new' />
+                                    name='is_new' {{ $product->is_new == 1 ? 'checked' : '' }} />
                                 <label class="custom-control-label" for="new_product">New product</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" value='1' id="sale_product"
-                                    name='is_sale' />
+                                    name='is_sale' {{ $product->is_sale == 1 ? 'checked' : '' }}/>
                                 <label class="custom-control-label" for="sale_product">Sale product</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" value='1'
-                                    id="highlight_product" name='highlight' />
+                                    id="highlight_product" name='highlight' {{ $product->highlight == 1 ? 'checked' : '' }}/>
                                 <label class="custom-control-label" for="highlight_product">Highlight product</label>
                             </div>
                         </div>

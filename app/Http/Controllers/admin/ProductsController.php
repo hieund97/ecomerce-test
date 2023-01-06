@@ -35,7 +35,8 @@ class ProductsController extends Controller
     {
         $aryAttributeType = AttributeTypes::with('attributesValue')->get();
         $aryCategory = Categories::all();
-        return view('admin.products.create', compact('aryCategory', 'aryAttributeType'));
+        $aryProduct = Products::select('id', 'name')->get();
+        return view('admin.products.create', compact('aryCategory', 'aryAttributeType', 'aryProduct'));
     }
 
     /**
@@ -67,8 +68,8 @@ class ProductsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
                 'details' => $request->details,
-                'image' => $imageName
-
+                'image' => $imageName,
+                'related_product_id' => implode(',', $request->related_product_id),
             ]);
 
             // Attach Category
@@ -112,6 +113,7 @@ class ProductsController extends Controller
     public function edit($id)
     {
         $product = Products::findOrFail($id);
+        $aryProduct = Products::select('id', 'name')->get();
         // dd($product->categories->id);
         // foreach ($product->attribute_value as $key => $value) {
         //     $flag[] = $value->id;
@@ -119,7 +121,7 @@ class ProductsController extends Controller
         // dd($flag);
         $aryAttributeType = AttributeTypes::with('attributesValue')->get();
         $aryCategory = Categories::all();
-        return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product'));
+        return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product', 'aryProduct'));
     }
 
     /**
@@ -129,7 +131,7 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         //
     }

@@ -31,20 +31,21 @@
                                 <tr>
                                     <th width='5%'>ID</th>
                                     <th width='20%'>Name</th>
+                                    <th width='20%'>Image</th>
                                     <th width='10%'>Price</th>
                                     <th width='10%'>Category</th>
                                     <th width='5%'>Status</th>
-                                    <th width='20%'>Image</th>
                                     <th width='20%'>Description</th>
                                     <th width='10%'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($aryProduct as $product)
-                                    {{-- @dd($product) --}}
                                     <tr>
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->name }}</td>
+                                        <td><img class="image-product"
+                                                src="{{ asset('storage/images/products/' . $product->image) }}"></td>
                                         <td>{{ $product->price }}$</td>
                                         <td>
                                             @foreach ($product->categories as $cate)
@@ -52,11 +53,10 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $product->status }}</td>
-                                        <td><img width="150" height="150"
-                                                src="{{ asset('storage/images/products/'.$product->image) }}"></td>
                                         <td>{{ $product->description }}</td>
                                         <td>
-                                            <a href="{{ route('edit.products', $product->id) }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('edit.products', $product->id) }}" class="btn btn-primary"><i
+                                                    class="fas fa-edit"></i></a>
                                             <form style="display: inline" action="" method="POST">
                                                 @csrf
                                                 @method('DELETE')

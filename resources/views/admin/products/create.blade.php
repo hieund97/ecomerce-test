@@ -118,10 +118,11 @@
                         </div>
                         <div class="form-group">
                             <label>Related product</label>
-                            <select class="related_product" multiple="multiple" data-placeholder="Select a State"
+                            <select class="related_product" multiple="multiple" data-placeholder="Select a State" name="related_product_id[]"
                                 style="width: 100%;">
-                                <option>Alabama</option>
-                                <option>Alaska</option>
+                                @foreach ($aryProduct as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">

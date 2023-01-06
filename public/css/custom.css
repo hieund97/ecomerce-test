@@ -6,3 +6,7 @@
     height: 160px;
     overflow-y: scroll;
 }
+
+.image-product{
+    width: 25%;
+}

@@ -68,13 +68,13 @@
                                             <div class="row">
                                                 @foreach ($type->attributesValue as $value)
                                                     <div class="col-2 custom-control custom-checkbox">
-                                                        @foreach ($product->attribute_value as $valueProd)
-                                                        <input class="custom-control-input "
-                                                        {{ $valueProd->id == $value->id ? 'checked' : '' }}
+                                                        <input
+                                                            @foreach ($product->attribute_value as $valueProd)  {{ $valueProd->id == $value->id ? 'checked' : '' }} @endforeach
+                                                            class="custom-control-input attribute-value-id-{{ $type->id }}"
                                                             name="attribute_value[{{ $type->id }}][]" type="checkbox"
+                                                            data-type="{{ $type->id }}"
                                                             value="{{ $value->id }}"
                                                             id="{{ $value->name . '_' . $value->id }}" />
-                                                        @endforeach
                                                         <label for="{{ $value->name . '_' . $value->id }}"
                                                             class="custom-control-label">{{ $value->name }}</label>
                                                     </div>
@@ -110,7 +110,7 @@
                             <div class='scroll-category'>
                                 @foreach ($aryCategory as $category)
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" name="category[]" type="checkbox"
+                                        <input class="custom-control-input category-id" name="category[]" type="checkbox"
                                             id="{{ $category->name }}_{{ $category->id }}" value="{{ $category->id }}"
                                             @foreach ($product->categories as $cate)
                                                 {{ $cate->id == $category->id ? 'checked' : '' }} @endforeach />
@@ -122,18 +122,19 @@
                         </div>
                         <div class="form-group">
                             <label>Related product</label>
-                            <select class="related_product" multiple="multiple" data-placeholder="Select a State"
-                                style="width: 100%;">
+                            <select class="related_product" multiple="multiple" id="related_product"
+                                data-placeholder="Select a State" style="width: 100%;">
                                 @foreach ($aryProduct as $prd)
                                     @foreach (explode(',', $product->related_product_id) as $item)
-                                        <option {{ $item == $prd->id ? 'selected' : '' }} value="{{ $prd->id }}">{{ $prd->name }}</option>
+                                        <option {{ $item == $prd->id ? 'selected' : '' }} value="{{ $prd->id }}">
+                                            {{ $prd->name }}</option>
                                     @endforeach
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="status">Status</label>
-                            <select class="form-control" name="status">
+                            <select class="form-control" name="status" id="status">
                                 <option {{ $product->status == 1 ? 'selected' : '' }} value="1">On</option>
                                 <option {{ $product->status == 2 ? 'selected' : '' }} value="2">Off</option>
                             </select>
@@ -148,26 +149,27 @@
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" value='1' id="sale_product"
-                                    name='is_sale' {{ $product->is_sale == 1 ? 'checked' : '' }}/>
+                                    name='is_sale' {{ $product->is_sale == 1 ? 'checked' : '' }} />
                                 <label class="custom-control-label" for="sale_product">Sale product</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" value='1'
-                                    id="highlight_product" name='highlight' {{ $product->highlight == 1 ? 'checked' : '' }}/>
+                                    id="highlight_product" name='highlight'
+                                    {{ $product->highlight == 1 ? 'checked' : '' }} />
                                 <label class="custom-control-label" for="highlight_product">Highlight product</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="customFile">Image product</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile" name="image" />
+                                <input type="file" class="custom-file-input" id="image_product" name="image" />
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary submit-edit-product" data-id="{{ $product->id }}">
                         Submit
                     </button>
                 </div>
@@ -184,6 +186,63 @@
 
         $(document).ready(function() {
             $('.related_product').select2();
+
+            //Edit products
+            $('.submit-edit-product').on('click', function() {
+                // debugger;
+                var productId = $(this).attr('data-id');
+                var nameValue = $('#name').val();
+                var skuValue = $('#sku').val();
+                var priceValue = $('#price').val();
+                var isNewValue = $('#new_product').val();
+                var isSaleValue = $('#sale_product').val();
+                var highlightValue = $('#highlight_product').val();
+                var statusValue = $('#status').val();
+                var quantityValue = $('#quantity').val();
+                var descriptionValue = $('#description').val();
+                var detailsValue = $('#product_detail').val();
+                var relatedValue = $('#related_product').val();
+                var aryCategoryValue = $('.category-id:checked').map(function() {
+                    return this.value
+                }).get();
+                var aryAttributeValue = [];
+
+                @foreach ($aryAttributeType as $key => $type)
+                    aryAttributeValue['{{$type->id}}'] = $('.attribute-value-id-{{$type->id}}:checked').map(function() {
+                        return this.value
+                    }).get()
+                @endforeach
+
+                $.ajax({
+                    url: '{{ route('update.products') }}',
+                    method: 'POST',
+                    data: {
+                        _method: 'PUT',
+                        _token: '{{ csrf_token() }}',
+                        id: productId,
+                        name: nameValue,
+                        sku: skuValue,
+                        price: priceValue,
+                        is_new: isNewValue,
+                        is_sale: isSaleValue,
+                        highlight: highlightValue,
+                        status: statusValue,
+                        quantity: quantityValue,
+                        description: descriptionValue,
+                        details: detailsValue,
+                        related_product_id: relatedValue,
+                        category: aryCategoryValue,
+                        attribute_value: aryAttributeValue
+                    },
+                    success: function(response) {
+                        // Swal.fire('Edit successfully!', '', 'success')
+                        console.log(response, 1);
+                    },
+                    error: function(response) {
+                        console.log(response, 2);
+                    }
+                })
+            });
         })
     </script>
 @endpush

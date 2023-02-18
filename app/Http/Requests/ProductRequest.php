@@ -23,6 +23,7 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        // $this->request->id
         return [
             'name' => 'required',
             'description' => 'required|min:3|max:255',

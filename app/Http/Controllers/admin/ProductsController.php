@@ -127,6 +127,10 @@ class ProductsController extends Controller
         $product = Products::findOrFail($request->id);
         try {
             DB::beginTransaction();
+
+            $imageName = $this->processImage($request);
+            
+
             $product->update([
                 'name' => $request->name,
                 'sku' => $request->sku,
@@ -139,14 +143,15 @@ class ProductsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
                 'details' => $request->details,
-                // 'image' => $imageName,
-                // 'related_product_id' => implode(',', $request->related_product_id),
+                'image' => $imageName,
+                'related_product_id' => !empty($request->related_product_id) ? implode(',', $request->related_product_id) : null,
             ]);
+
             //Category
-            $product->categories()->sync($request->category);
+            $product->categories()->sync(json_decode($request->category, true));
 
             //AttributeValue
-            $arrayValue = $this->adjustAttributeValue($request->attribute_value);
+            $arrayValue = $this->adjustAttributeValue(json_decode($request->attribute_value, true));
             $product->attribute_value()->sync($arrayValue);
             
             //Variant
@@ -154,7 +159,7 @@ class ProductsController extends Controller
                 $variant->values()->detach();
                 $variant->delete();
             });
-            
+
             $aryVariant = generateVariant($request->attribute_value);
             foreach ($aryVariant as $key => $var) {
                 $variant = Variant::create([
@@ -163,7 +168,6 @@ class ProductsController extends Controller
                 ]);
                 $variant->values()->attach($var);
             }
-
 
             DB::commit();
         } catch (\Exception $e) {
@@ -237,10 +241,16 @@ class ProductsController extends Controller
         return response()->json(['message' => 'success'], 200);
     }
 
+    /**
+     * Function handle attribute value
+     *
+     * @param array $data
+     * @return array
+     */
     private function adjustAttributeValue($data = []){
         $arrayValue = [];
 
-        foreach ($data as  $aryValue) {
+        foreach ($data as $aryValue) {
             if(!empty($aryValue)){
                 foreach ($aryValue as $valueItem) {
                     $arrayValue[] = $valueItem;
@@ -263,6 +273,17 @@ class ProductsController extends Controller
         }
 
         return true;
+    }
+
+    private function processImage($request){
+        if ($request->hasFile('image')) {
+            $destination_path = 'public/images/products';
+            $image = $request->file('image');
+            $imageName = $image->getClientOriginalName();
+            $path = $request->file('image')->storeAs($destination_path, $imageName);
+        }
+
+        return $imageName;
     }
 }
 

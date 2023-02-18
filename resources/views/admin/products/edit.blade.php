@@ -205,6 +205,8 @@
                 var aryCategoryValue = $('.category-id:checked').map(function() {
                     return this.value
                 }).get();
+                var imageValue = $('#image_product').prop('files')[0];
+                // check value neu ko co value thi ban thng bao va return
                 var aryAttributeValue = [];
 
                 @foreach ($aryAttributeType as $key => $type)
@@ -213,30 +215,37 @@
                     }).get()
                 @endforeach
 
+                var formData = new FormData();
+                formData.append('_method', 'PUT');
+                formData.append('_token', '{{ csrf_token() }}');
+                formData.append('id', productId);
+                formData.append('name', nameValue);
+                formData.append('sku', skuValue);
+                formData.append('price', priceValue);
+                formData.append('is_new', isNewValue);
+                formData.append('is_sale', isSaleValue);
+                formData.append('highlight', highlightValue);
+                formData.append('status', statusValue);
+                formData.append('quantity', quantityValue);
+                formData.append('description', descriptionValue);
+                formData.append('details', detailsValue);
+                formData.append('related_product_id', relatedValue);
+                formData.append('category', JSON.stringify(aryCategoryValue));
+                formData.append('attribute_value', JSON.stringify(aryAttributeValue));
+                formData.append('image', imageValue);
+
                 $.ajax({
                     url: '{{ route('update.products') }}',
                     method: 'POST',
-                    data: {
-                        _method: 'PUT',
-                        _token: '{{ csrf_token() }}',
-                        id: productId,
-                        name: nameValue,
-                        sku: skuValue,
-                        price: priceValue,
-                        is_new: isNewValue,
-                        is_sale: isSaleValue,
-                        highlight: highlightValue,
-                        status: statusValue,
-                        quantity: quantityValue,
-                        description: descriptionValue,
-                        details: detailsValue,
-                        related_product_id: relatedValue,
-                        category: aryCategoryValue,
-                        attribute_value: aryAttributeValue
-                    },
+                    contentType: 'multipart/form-data',
+                    cache: false,
+                    contentType: false,
+                    processData:false,
+                    data: formData,
                     success: function(response) {
-                        // Swal.fire('Edit successfully!', '', 'success')
                         console.log(response, 1);
+
+                        // Swal.fire('Edit successfully!', '', 'success')
                     },
                     error: function(response) {
                         console.log(response, 2);

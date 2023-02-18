@@ -78,11 +78,6 @@ class ProductsController extends Controller
 
             // Attach Value
             $arrayValue = $this->adjustAttributeValue($request->attribute_value);
-            // foreach ($request->attribute_value as  $aryValue) {
-            //     foreach ($aryValue as $valueItem) {
-            //         $arrayValue[] = $valueItem;
-            //     }
-            // }
             $product->attribute_value()->attach($arrayValue);
 
             // Create variant
@@ -161,7 +156,6 @@ class ProductsController extends Controller
             });
             
             $aryVariant = generateVariant($request->attribute_value);
-            // return response()->json([$arrayValue, $aryVariant], 200);
             foreach ($aryVariant as $key => $var) {
                 $variant = Variant::create([
                     'product_id' => $product->id,

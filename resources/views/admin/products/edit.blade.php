@@ -232,8 +232,10 @@
                 formData.append('related_product_id', relatedValue);
                 formData.append('category', JSON.stringify(aryCategoryValue));
                 formData.append('attribute_value', JSON.stringify(aryAttributeValue));
-                formData.append('image', imageValue);
-
+                if($('#image_product').get(0).files.length !== 0){
+                    var imageValue = $('#image_product').prop('files')[0];
+                    formData.append('image', imageValue);
+                }
                 $.ajax({
                     url: '{{ route('update.products') }}',
                     method: 'POST',
@@ -243,12 +245,13 @@
                     processData:false,
                     data: formData,
                     success: function(response) {
-                        console.log(response, 1);
-
-                        // Swal.fire('Edit successfully!', '', 'success')
+                        Swal.fire('Edit successfully!', '', 'success');
                     },
                     error: function(response) {
-                        console.log(response, 2);
+                        Swal.fire({
+                            icon: 'error',
+                            text: response.message,
+                        });
                     }
                 })
             });

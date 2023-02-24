@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * ADMIN
+ */
 Route::group([
     'prefix' => env('ADMIN_URL', 'admin'),
     'namespace' => 'App\Http\Controllers\admin'
@@ -93,4 +96,11 @@ Route::group([
     });
 });
 
-
+/**
+ * CLIENT
+ */
+Route::group([
+    'namespace' => 'App\Http\Controllers\client'
+], function(){
+    Route::get('/', 'MainController@index')->name('index');
+});

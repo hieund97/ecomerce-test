@@ -45,7 +45,7 @@
                                         <td>{{ $product->id }}</td>
                                         <td>{{ $product->name }}</td>
                                         <td><img class="image-product"
-                                                src="{{ asset('storage/images/products/' . $product->image) }}"></td>
+                                                src="{{ asset('storage/images/' . $product->image) }}"></td>
                                         <td>{{ $product->price }}$</td>
                                         <td>
                                             @foreach ($product->categories as $cate)
@@ -127,7 +127,7 @@
                             data: {
                                 _method: 'DELETE',
                                 _token: '{{ csrf_token() }}',
-                                product_id: productID
+                                id: productID
                             },
                             success: function(response) {
                                 Swal.fire('Product is deleted!', '', 'success')

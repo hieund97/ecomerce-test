@@ -48,13 +48,8 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        if ($request->hasFile('image')) {
-            $destination_path = 'public/images/products';
-            $image = $request->file('image');
-            $imageName = $image->getClientOriginalName();
-            $path = $request->file('image')->storeAs($destination_path, $imageName);
-        }
-
+        $imageName = $this->processImage($request);
+        
         try {
             DB::beginTransaction();
             $product = Products::create([
@@ -81,14 +76,7 @@ class ProductsController extends Controller
             $product->attribute_value()->attach($arrayValue);
 
             // Create variant
-            $aryVariant = generateVariant($request->attribute_value);
-            foreach ($aryVariant as $key => $var) {
-                $variant = Variant::create([
-                    'product_id' => $product->id,
-                    'price' => $product->price
-                ]);
-                $variant->values()->attach($var);
-            }
+            $this->createVariant($request->attribute_value, $product);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -127,6 +115,18 @@ class ProductsController extends Controller
         $product = Products::findOrFail($request->id);
         try {
             DB::beginTransaction();
+            if ($request->hasFile('image')) {
+                $imageName = $this->processImage($request);
+            }
+
+            if ($request->hasFile('image')) {
+                $imageName = $this->processImage($request);
+
+                $product->update([
+                    'image' => $imageName,
+                ]);
+            }
+
             $product->update([
                 'name' => $request->name,
                 'sku' => $request->sku,
@@ -139,14 +139,14 @@ class ProductsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
                 'details' => $request->details,
-                // 'image' => $imageName,
-                // 'related_product_id' => implode(',', $request->related_product_id),
+                'related_product_id' => !empty($request->related_product_id) ? implode(',', $request->related_product_id) : null,
             ]);
-            //Category
-            $product->categories()->sync($request->category);
 
+            //Category
+            $product->categories()->sync(json_decode($request->category, true));
+            
             //AttributeValue
-            $arrayValue = $this->adjustAttributeValue($request->attribute_value);
+            $arrayValue = $this->adjustAttributeValue(json_decode($request->attribute_value, true));
             $product->attribute_value()->sync($arrayValue);
             
             //Variant
@@ -155,7 +155,7 @@ class ProductsController extends Controller
                 $variant->delete();
             });
             
-            $aryVariant = generateVariant($request->attribute_value);
+            $aryVariant = generateVariant(json_decode($request->attribute_value, true));
             foreach ($aryVariant as $key => $var) {
                 $variant = Variant::create([
                     'product_id' => $product->id,
@@ -163,13 +163,13 @@ class ProductsController extends Controller
                 ]);
                 $variant->values()->attach($var);
             }
-
-
+            
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
-            return redirect()->route('dashboard');
+            return response()->json(['message' => $e->getMessage()], 200);
+
         }
 
         return response()->json(['message' => 'success'], 200);
@@ -199,7 +199,7 @@ class ProductsController extends Controller
      */
     public function destroy(Request $request)
     {
-        $product = Products::findOrFail($request->product_id);
+        $product = Products::findOrFail($request->id);
         try {
             DB::beginTransaction();
             //Category
@@ -217,16 +217,13 @@ class ProductsController extends Controller
             $product->attribute_value()->detach($aryValueID);
 
             //Variant
-            $aryVariant = Variant::where('product_id', $request->product_id)->get();
-            foreach ($aryVariant as $key => $variant) {
-                $aryValue =[];
-                foreach ($variant->values as $key => $value) {
-                    $aryValue[] = $value->id;
-                }
-                $variant->values()->detach($aryValue);
+            $aryVariant = Variant::where('product_id', $request->id)->get()->each(function($variant) {
+                $variant->values()->detach();
                 $variant->delete();
-            }
-        $product->delete();
+            });
+            
+            //Product
+            $product->delete();
 
             DB::commit();
         } catch (\Exception $e) {
@@ -237,10 +234,16 @@ class ProductsController extends Controller
         return response()->json(['message' => 'success'], 200);
     }
 
+    /**
+     * Function handle attribute value
+     *
+     * @param array $data
+     * @return array
+     */
     private function adjustAttributeValue($data = []){
         $arrayValue = [];
 
-        foreach ($data as  $aryValue) {
+        foreach ($data as $aryValue) {
             if(!empty($aryValue)){
                 foreach ($aryValue as $valueItem) {
                     $arrayValue[] = $valueItem;
@@ -251,6 +254,13 @@ class ProductsController extends Controller
         return $arrayValue;
     }
 
+    /**
+     * Function create new variant
+     *
+     * @param array $dataAttribute
+     * @param [type] $product
+     * @return void
+     */
     private function createVariant($dataAttribute = [], $product){
         $aryVariant = generateVariant($dataAttribute);
 
@@ -261,8 +271,23 @@ class ProductsController extends Controller
             ]);
             $variant->values()->attach($var);
         }
-
+        
         return true;
+    }
+
+    /**
+     * Function to find and save image
+     *
+     * @param [type] $request
+     * @return void
+     */
+    private function processImage($request){
+        $destination_path = 'public/images';
+        $image = $request->file('image');
+        $imageName = 'products/'.$image->getClientOriginalName();
+        $path = $request->file('image')->storeAs($destination_path, $imageName);
+
+        return $imageName;
     }
 }
 

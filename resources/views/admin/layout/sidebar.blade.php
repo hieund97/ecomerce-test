@@ -167,6 +167,31 @@
                     </ul>
                 </li>
                 {{-- End Products --}}
+                {{-- Slider --}}
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'slider') !== false ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(), 'slider') !== false ? 'active' : '' }}">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>
+                            Slider
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.slider') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.slider') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Slider</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.slider') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.slider') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Slider</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Slider --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

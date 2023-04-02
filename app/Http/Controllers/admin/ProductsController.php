@@ -13,6 +13,7 @@ use DB;
 
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
+use App\Models\ImageValues;
 
 class ProductsController extends Controller
 {
@@ -23,8 +24,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $aryProduct = Products::with('categories')->paginate(5);
-        return view('admin.products.list', compact('aryProduct'));
+        $aryProduct = Products::with('categories', 'image')->paginate(5);
+        $aryImage = ImageValues::where('is_primary', 1)->get();
+        return view('admin.products.list', compact('aryProduct', 'aryImage'));
     }
 
     /**
@@ -46,10 +48,8 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(Request $request)
     {
-        $imageName = $this->processImage($request);
-        
         try {
             DB::beginTransaction();
             $product = Products::create([
@@ -64,25 +64,29 @@ class ProductsController extends Controller
                 'quantity' => $request->quantity,
                 'description' => $request->description,
                 'details' => $request->details,
-                'image' => $imageName,
                 'related_product_id' => $request->has('related_product_id') ? implode(',', $request->related_product_id) : null,
             ]);
 
+            $image = $this->processImage($request, $product);
+            
             // Attach Category
             $product->categories()->attach($request->category);
-
+            
             // Attach Value
             $arrayValue = $this->adjustAttributeValue($request->attribute_value);
             $product->attribute_value()->attach($arrayValue);
-
+            
             // Create variant
             $this->createVariant($request->attribute_value, $product);
-
+            
+            //Create image
+            ImageValues::insert($image);
+            
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
-            return redirect()->route('dashboard');
+            // return redirect()->route('dashboard');
         }
 
         return redirect()->route('create.products');
@@ -110,22 +114,11 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(ProductRequest $request)
     {
         $product = Products::findOrFail($request->id);
         try {
             DB::beginTransaction();
-            if ($request->hasFile('image')) {
-                $imageName = $this->processImage($request);
-            }
-
-            if ($request->hasFile('image')) {
-                $imageName = $this->processImage($request);
-
-                $product->update([
-                    'image' => $imageName,
-                ]);
-            }
 
             $product->update([
                 'name' => $request->name,
@@ -141,6 +134,8 @@ class ProductsController extends Controller
                 'details' => $request->details,
                 'related_product_id' => !empty($request->related_product_id) ? implode(',', $request->related_product_id) : null,
             ]);
+            $imageName = $this->processImage($request, $product);
+
 
             //Category
             $product->categories()->sync(json_decode($request->category, true));
@@ -163,7 +158,13 @@ class ProductsController extends Controller
                 ]);
                 $variant->values()->attach($var);
             }
-            
+
+            //Create image
+            ImageValues::where('related_id', $product->id)->get()->each(function($image){
+                $image->delete();
+            });
+            ImageValues::insert($imageName);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -281,13 +282,40 @@ class ProductsController extends Controller
      * @param [type] $request
      * @return void
      */
-    private function processImage($request){
-        $destination_path = 'public/images';
+    private function processImage($request, $product){
+        $aryImage = [];
+        $destination_path = config('handle.destination_path');
         $image = $request->file('image');
-        $imageName = 'products/'.$image->getClientOriginalName();
-        $path = $request->file('image')->storeAs($destination_path, $imageName);
+        $primaryImage = 'products/'.$image->getClientOriginalName();
+        $request->file('image')->storeAs($destination_path, $primaryImage);
 
-        return $imageName;
+        $aryPrimaryImage = [
+            'name' => $primaryImage,
+            'is_primary' => config('handle.primary_image.primary'),
+            'related_id' => $product->id,
+            'image_type' => config('handle.image_type.product'),
+        ];
+        array_push($aryImage, $aryPrimaryImage);
+        
+        $aryRelatedImageName = [];
+        foreach ($request->file('image-prod') as $key => $image) {
+            $destination_path = config('handle.destination_path');
+            $imageName = 'products/'.$image->getClientOriginalName();
+            $request->file('image')->storeAs($destination_path, $imageName);
+            $aryRelatedImageName[] = $imageName;
+        }
+
+        foreach ($aryRelatedImageName as $key => $image) {
+            $aryRelatedImage = [
+                'name' => $image,
+                'is_primary' => config('handle.primary_image.not_primary'),
+                'related_id' => $product->id,
+                'image_type' => config('handle.image_type.product'),
+            ];
+            array_push($aryImage, $aryRelatedImage);
+        }
+
+        return $aryImage;
     }
 }
 

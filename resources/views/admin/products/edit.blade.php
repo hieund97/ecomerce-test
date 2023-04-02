@@ -85,6 +85,10 @@
                                 </div>
                             </div>
                             <!-- /.card -->
+                            <div class="input-field">
+                                <label class="active">Related Image</label>
+                                <div class="input-images-1" style="padding-top: .5rem;"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -186,10 +190,17 @@
 
         $(document).ready(function() {
             $('.related_product').select2();
+        })
+
+        $('.input-images-1').imageUploader({
+            imagesInputName: 'image-prod',
+        });
+
+        $(document).ready(function() {
+            $('.related_product').select2();
 
             //Edit products
             $('.submit-edit-product').on('click', function() {
-                // debugger;
                 var productId = $(this).attr('data-id');
                 var nameValue = $('#name').val();
                 var skuValue = $('#sku').val();
@@ -206,9 +217,9 @@
                     return this.value
                 }).get();
                 var imageValue = $('#image_product').prop('files')[0];
-                // check value neu ko co value thi ban thng bao va return
+                var aryImage = document.getElementByName('image-prod');
+                console.log(aryImage);return;
                 var aryAttributeValue = [];
-
                 @foreach ($aryAttributeType as $key => $type)
                     aryAttributeValue['{{$type->id}}'] = $('.attribute-value-id-{{$type->id}}:checked').map(function() {
                         return this.value
@@ -248,10 +259,10 @@
                         Swal.fire('Edit successfully!', '', 'success');
                     },
                     error: function(response) {
-                        Swal.fire({
-                            icon: 'error',
-                            text: response.message,
-                        });
+                        $.each(response.responseJSON.errors, function(index, error) {
+                        $('input[name='+index+']').addClass('is-invalid')
+                        toastr.error(error)
+                    });
                     }
                 })
             });

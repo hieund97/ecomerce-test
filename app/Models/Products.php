@@ -49,4 +49,13 @@ class Products extends Model
         return $this->hasMany(Variant::class, 'product_id', 'id');
     }
 
+    /**
+     * Get all of the image_value for the Products
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function image()
+    {
+        return $this->hasMany(ImageValues::class, 'related_id', 'id');
+    }
 }

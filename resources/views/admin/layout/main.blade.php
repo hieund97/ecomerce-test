@@ -21,6 +21,9 @@
   <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   {{-- Custom css --}}
   <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/image-uploader.min.css') }}">
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 </head>
 <!--
 `body` tag options:
@@ -64,7 +67,16 @@
 <!-- Toastr -->
 <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 {{-- CKEditor --}}
-<script src="{{ asset('plugins\ckeditor\ckeditor.js') }}"></script>
+<script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
+
+<script src="{{ asset('js/jasny-bootstrap.min.js') }}"></script>
+
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+
+<script src="{{ asset('js/additional-methods.min.js') }}"></script>
+
+<script src="{{ asset('js/image-uploader.min.js') }}"></script>
+
 @stack('js')
 </body>
 </html>

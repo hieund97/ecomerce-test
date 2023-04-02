@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class SliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,32 +23,29 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->image);
-        return [
-            'name' => 'required|unique:products,name,'.$this->id,
+        $aryRule =  [
+            'name' => "required|unique:slider,name,".$this->id,
+            'title' => 'required',
             'description' => 'required|min:3|max:255',
-            'details' => 'required|min:3',
-            'sku' => 'required|unique:products,sku,'.$this->id,
-            'price' => 'required|numeric',
-            'quantity' => 'numeric|required',
-            'is_new' => 'numeric',
-            'is_sale' => 'numeric',
-            'highlight' => 'numeric',
+            'image' => 'required|max:5000|mimes:jpeg,png,jpg',
             'status' => 'required|numeric',
-            'related_product_id' => 'nullable',
-            'image' => 'required|max:5000|mimes:jpeg,png,jpg'
+            'type_slider' => 'required|numeric|max:1',
+            'related_id' => 'required|numeric',
         ];
+        // check neeus ton tai this->id thi xoa requried trong image cuar aryrule
+        if($this->id){
+            $aryRule['image'] = 'max:5000|mimes:jpeg,png,jpg';
+        }
+        return $aryRule;
     }
 
     public function messages()
     {
-        return [
+        return[
             'required' => ':attribute must be filled',
             'max' => ':attribute is too long(max: 255 characters)',
             'min' => ':attribute is too short(min: 3 characters)',
             'numeric' => ':attribute must be number',
         ];
     }
-
-    
 }

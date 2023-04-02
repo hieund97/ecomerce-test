@@ -85,6 +85,10 @@
                                 </div>
                             </div>
                             <!-- /.card -->
+                            <div class="input-field">
+                                <label class="active">Related Image</label>
+                                <div class="input-images-1" style="padding-top: .5rem;"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -154,7 +158,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="customFile">Image product</label>
+                            <label for="customFile">Primary Image</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="customFile" name="image" />
                                 <label class="custom-file-label" for="customFile">Choose file</label>
@@ -179,5 +183,9 @@
         $(document).ready(function() {
             $('.related_product').select2();
         })
+
+        $('.input-images-1').imageUploader({
+            imagesInputName: 'image-prod',
+        });
     </script>
 @endpush

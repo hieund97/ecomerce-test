@@ -72,8 +72,7 @@
                                                             @foreach ($product->attribute_value as $valueProd)  {{ $valueProd->id == $value->id ? 'checked' : '' }} @endforeach
                                                             class="custom-control-input attribute-value-id-{{ $type->id }}"
                                                             name="attribute_value[{{ $type->id }}][]" type="checkbox"
-                                                            data-type="{{ $type->id }}"
-                                                            value="{{ $value->id }}"
+                                                            data-type="{{ $type->id }}" value="{{ $value->id }}"
                                                             id="{{ $value->name . '_' . $value->id }}" />
                                                         <label for="{{ $value->name . '_' . $value->id }}"
                                                             class="custom-control-label">{{ $value->name }}</label>
@@ -218,10 +217,12 @@
                 }).get();
                 var imageValue = $('#image_product').prop('files')[0];
                 var aryImage = document.getElementByName('image-prod');
-                console.log(aryImage);return;
+                console.log(aryImage);
+                return;
                 var aryAttributeValue = [];
                 @foreach ($aryAttributeType as $key => $type)
-                    aryAttributeValue['{{$type->id}}'] = $('.attribute-value-id-{{$type->id}}:checked').map(function() {
+                    aryAttributeValue['{{ $type->id }}'] = $(
+                        '.attribute-value-id-{{ $type->id }}:checked').map(function() {
                         return this.value
                     }).get()
                 @endforeach
@@ -243,7 +244,7 @@
                 formData.append('related_product_id', relatedValue);
                 formData.append('category', JSON.stringify(aryCategoryValue));
                 formData.append('attribute_value', JSON.stringify(aryAttributeValue));
-                if($('#image_product').get(0).files.length !== 0){
+                if ($('#image_product').get(0).files.length !== 0) {
                     var imageValue = $('#image_product').prop('files')[0];
                     formData.append('image', imageValue);
                 }
@@ -253,16 +254,16 @@
                     contentType: 'multipart/form-data',
                     cache: false,
                     contentType: false,
-                    processData:false,
+                    processData: false,
                     data: formData,
                     success: function(response) {
                         Swal.fire('Edit successfully!', '', 'success');
                     },
                     error: function(response) {
                         $.each(response.responseJSON.errors, function(index, error) {
-                        $('input[name='+index+']').addClass('is-invalid')
-                        toastr.error(error)
-                    });
+                            $('input[name=' + index + ']').addClass('is-invalid')
+                            toastr.error(error)
+                        });
                     }
                 })
             });

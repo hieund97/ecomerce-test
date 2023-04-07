@@ -192,6 +192,31 @@
                     </ul>
                 </li>
                 {{-- End Slider --}}
+                {{-- Tag --}}
+                <li class="nav-item {{ strpos(Request::route()->getName(), 'tag') !== false ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ strpos(Request::route()->getName(), 'tag') !== false ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>
+                            Tag
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.tag') }}" class="nav-link {{ strpos(Request::route()->getName(), 'list.tag') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Tag</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.tag') }}" class="nav-link {{ strpos(Request::route()->getName(), 'create.tag') !== false ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Tag</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Tag --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -89,6 +89,7 @@ Route::group([
         Route::get('/', 'ProductsController@index')->name('list.products');
         Route::get('/create', 'ProductsController@create')->name('create.products');
         Route::post('/store', 'ProductsController@store')->name('store.products');
+        Route::get('/get-tag', 'ProductsController@getTag')->name('get.tag');
         Route::get('/edit/{id}', 'ProductsController@edit')->name('edit.products');
         Route::put('/update', 'ProductsController@update')->name('update.products');
         Route::delete('/delete/product', 'ProductsController@destroy')->name('delete.products');
@@ -105,7 +106,19 @@ Route::group([
         Route::get('/get-related-url', 'SlidersController@getRelatedID')->name('get.related.id');
         Route::get('/edit/{id}', 'SlidersController@edit')->name('edit.slider');
         Route::put('/update', 'SlidersController@update')->name('update.slider');
-        Route::delete('/delete/product', 'SlidersController@destroy')->name('delete.slider');
+        Route::delete('/delete/{id}', 'SlidersController@destroy')->name('delete.slider');
+    });
+
+    //Route Tag
+    Route::group([
+        'prefix' => 'tag'
+    ], function(){
+        Route::get('/', 'TagsController@index')->name('list.tag');
+        Route::get('/create', 'TagsController@create')->name('create.tag');
+        Route::post('/store', 'TagsController@store')->name('store.tag');
+        Route::get('/edit/{id}', 'TagsController@edit')->name('edit.tag');
+        Route::put('/update', 'TagsController@update')->name('update.tag');
+        Route::delete('/delete/{id}', 'TagsController@destroy')->name('delete.tag');
     });
 });
 

@@ -24,7 +24,7 @@ class Slider extends Model
      */
     public function image()
     {
-        return $this->hasMany(ImageValues::class, 'image_id', 'id');
+        return $this->hasMany(ImageValues::class, 'related_id', 'id');
     }
 
     protected $table = 'slider';

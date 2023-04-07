@@ -52,4 +52,12 @@ return[
         'not_primary' => 0,
         'primary'     => 1,
     ],
+
+    /**
+     * type of tags
+     */
+    'type_of_tag' =>[
+        'product' => 1,
+        'blog' => 2,
+    ],
 ];

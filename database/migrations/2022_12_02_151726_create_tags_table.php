@@ -17,6 +17,8 @@ class CreateTagsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('slug');
+            $table->integer('status')->default(1)->comment('0: Off | 1: On');
+            $table->integer('type')->default(1)->comment('1: product | 2: blog');
             $table->timestamps();
         });
     }

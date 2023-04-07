@@ -14,6 +14,7 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
 use App\Models\ImageValues;
+use App\Models\Tag;
 
 class ProductsController extends Controller
 {
@@ -39,7 +40,8 @@ class ProductsController extends Controller
         $aryAttributeType = AttributeTypes::with('attributesValue')->get();
         $aryCategory = Categories::all();
         $aryProduct = Products::select('id', 'name')->get();
-        return view('admin.products.create', compact('aryCategory', 'aryAttributeType', 'aryProduct'));
+        $aryTag = Tag::select('id', 'name')->get();
+        return view('admin.products.create', compact('aryCategory', 'aryAttributeType', 'aryProduct', 'aryTag'));
     }
 
     /**
@@ -316,6 +318,13 @@ class ProductsController extends Controller
         }
 
         return $aryImage;
+    }
+
+    public function getTag (Request $request){
+        $data = Tag::select("name")
+                    ->where('name', 'LIKE', '%'. $request->get('tag'). '%')
+                    ->get();
+        return response()->json($data, 200);
     }
 }
 

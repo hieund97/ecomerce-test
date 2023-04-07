@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SliderRequest;
 use App\Models\Categories;
 use App\Models\Products;
+use App\Models\ImageValues;
 use Illuminate\Http\Request;
 use App\Models\Slider;
 class SlidersController extends Controller
@@ -17,7 +18,9 @@ class SlidersController extends Controller
      */
     public function index()
     {
-        $arySlider = Slider::paginate(5);
+        $arySlider = Slider::with('image')->paginate(5);
+        // $aryImage = ImageValues::where('is_primary', 1)->where('image_type')->get();
+        // dd($arySlider);
         return view('admin.slider.list', compact('arySlider'));
     }
 

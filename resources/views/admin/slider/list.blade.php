@@ -42,8 +42,13 @@
                                     <tr>
                                         <td>{{ $slider->id }}</td>
                                         <td>{{ $slider->name }}</td>
-                                        <td><img class="image-product"
-                                            src="{{ asset('storage/images/' ) }}"></td>
+                                        <td>
+                                            @foreach ($slider->image as $image)
+                                            @if ($image->is_primary == 1)
+                                                <img class="image-slider"
+                                                src="{{ asset('storage/images/'.$image->name ) }}"></td>
+                                            @endif
+                                            @endforeach
                                         <td>{{ $slider->title }}</td>
                                         <td>
                                             {{ $slider->status == 0 ? 'Off' : 'On' }}
@@ -65,7 +70,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    {{ $arySlider->links('admin.partials.pagination') }}
+                    
                 </div>
                 <!-- /.card -->
             </div>

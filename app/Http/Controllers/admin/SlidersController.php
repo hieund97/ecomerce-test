@@ -9,6 +9,9 @@ use App\Models\Products;
 use App\Models\ImageValues;
 use Illuminate\Http\Request;
 use App\Models\Slider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 class SlidersController extends Controller
 {
     /**
@@ -19,8 +22,6 @@ class SlidersController extends Controller
     public function index()
     {
         $arySlider = Slider::with('image')->paginate(5);
-        // $aryImage = ImageValues::where('is_primary', 1)->where('image_type')->get();
-        // dd($arySlider);
         return view('admin.slider.list', compact('arySlider'));
     }
 
@@ -110,7 +111,10 @@ class SlidersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $slider = Slider::findOrFail($id);
+        $slider->delete();
+        $image = ImageValues::where('related_id', $id);
+        $image->delete();
     }
 
     public function getRelatedID(Request $request)

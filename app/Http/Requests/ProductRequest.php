@@ -23,7 +23,6 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->image);
         return [
             'name' => 'required|unique:products,name,'.$this->id,
             'description' => 'required|min:3|max:255',

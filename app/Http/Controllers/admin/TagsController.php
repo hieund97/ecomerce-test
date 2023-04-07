@@ -38,7 +38,6 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->file('related_image'));
         Tag::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name, '-'),

@@ -97,16 +97,10 @@
     <script>
         $('.edit-submit').click(function(e) {
             e.preventDefault();
-            // debugger;
             var idValue = $('#id').val();
             var nameValue = $('#name').val();
             var statusValue = $('#status').val();
             var typeValue = $('#type').val();
-            // console.log(idValue);
-            // console.log(nameValue);
-            // console.log(statusValue);
-            // console.log(typeValue);return;
-
 
             var formData = new FormData();
             formData.append('_method', 'PUT');

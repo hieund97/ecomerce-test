@@ -39,7 +39,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($arySlider as $slider)
-                                    <tr>
+                                    <tr id="slider_{{ $slider->id }}">
                                         <td>{{ $slider->id }}</td>
                                         <td>{{ $slider->name }}</td>
                                         <td>
@@ -56,13 +56,8 @@
                                         <td>
                                             <a href="{{ route('edit.slider', $slider->id) }}" class="btn btn-primary"><i
                                                     class="fas fa-edit"></i></a>
-                                            <form style="display: inline" action=""
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"><i
-                                                        class="fas fa-trash"></i></button>
-                                            </form>
+                                            <button type="button" class="btn btn-danger btn-del"
+                                            data-id="{{ $slider->id }}"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -78,3 +73,38 @@
     </div>
     <!-- /.content-wrapper -->
 @endsection
+@push('js')
+    <script>
+        $('.btn-del').click(function(e) {
+            e.preventDefault();
+            var sliderID = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Do you want to delete this slider?',
+                showDenyButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'slider/delete/'+sliderID ,
+                        method: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: '{{ csrf_token() }}',
+                            id: sliderID
+                        },
+                        success: function(response) {
+                            Swal.fire('Slider is deleted!', '', 'success')
+                            $('#slider_' + sliderID).remove()
+                        },
+                        error: function(response) {
+                            console.log(response);
+                        }
+                    })
+                } else if (result.isDenied) {
+                    Swal.fire('Slider is not deleted', '', 'info')
+                }
+            })
+        });
+    </script>
+@endpush

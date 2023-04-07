@@ -217,8 +217,6 @@
                 }).get();
                 var imageValue = $('#image_product').prop('files')[0];
                 var aryImage = document.getElementByName('image-prod');
-                console.log(aryImage);
-                return;
                 var aryAttributeValue = [];
                 @foreach ($aryAttributeType as $key => $type)
                     aryAttributeValue['{{ $type->id }}'] = $(

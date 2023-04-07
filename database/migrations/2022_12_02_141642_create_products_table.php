@@ -26,7 +26,6 @@ class CreateProductsTable extends Migration
             $table->integer('quantity')->unsigned()->default(0);
             $table->text('description');
             $table->text('details');
-            $table->text('image');
             $table->string('related_product_id')->nullable();
             $table->timestamps();
         });

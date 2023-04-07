@@ -19,9 +19,9 @@
                     </div>
                 </div>
                 @if ($errors->any())
-                        <div class="alert alert-danger" role="alert">
-                            {{$errors->first()}}
-                        </div>
+                    <div class="alert alert-danger" role="alert">
+                        {{ $errors->first() }}
+                    </div>
                 @endif
             </div><!-- /.container-fluid -->
         </section>
@@ -85,23 +85,36 @@
                                 </div>
                             </div>
                             <!-- /.card -->
+                            <div class="input-field">
+                                <label class="active">Related Image</label>
+                                <div class="input-images-1" style="padding-top: .5rem;"></div>
+                            </div>
                         </div>
                     </div>
 
                     {{-- Right --}}
                     <div class="col-3">
                         <div class="form-group">
-                            <label for="password">SKU</label>
+                            <label>SKU</label>
                             <input class="form-control" name="sku" id="sku" placeholder="SKU">
                         </div>
                         <div class="form-group">
-                            <label for="password">Price($)</label>
+                            <label>Price($)</label>
                             <input class="form-control" name="price" id="price" placeholder="Price">
                         </div>
                         <div class="form-group">
-                            <label for="password">Quantity</label>
+                            <label>Quantity</label>
                             <input type="number" class="form-control" name="quantity" id="quantity"
                                 placeholder="quantity">
+                        </div>
+                        <div class="form-group">
+                            <label>Tag</label>
+                            <select class="tag" multiple="multiple" data-placeholder="Select a Tag"
+                                name="tag[]" style="width: 100%;">
+                                @foreach ($aryTag as $tag)
+                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Category</label>
@@ -109,7 +122,8 @@
                                 @foreach ($aryCategory as $category)
                                     <div class="custom-control custom-checkbox">
                                         <input class="custom-control-input " name="category[]" type="checkbox"
-                                            id="{{ $category->name }}_{{ $category->id }}" value="{{ $category->id }}" />
+                                            id="{{ $category->name }}_{{ $category->id }}"
+                                            value="{{ $category->id }}" />
                                         <label for="{{ $category->name }}_{{ $category->id }}"
                                             class="custom-control-label">{{ $category->name }}</label>
                                     </div>
@@ -118,8 +132,8 @@
                         </div>
                         <div class="form-group">
                             <label>Related product</label>
-                            <select class="related_product" multiple="multiple" data-placeholder="Select a State" name="related_product_id[]"
-                                style="width: 100%;">
+                            <select class="related_product" multiple="multiple" data-placeholder="Select a Product"
+                                name="related_product_id[]" style="width: 100%;">
                                 @foreach ($aryProduct as $product)
                                     <option value="{{ $product->id }}">{{ $product->name }}</option>
                                 @endforeach
@@ -154,7 +168,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="customFile">Image product</label>
+                            <label for="customFile">Primary Image</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="customFile" name="image" />
                                 <label class="custom-file-label" for="customFile">Choose file</label>
@@ -178,6 +192,49 @@
 
         $(document).ready(function() {
             $('.related_product').select2();
+            $('.tag').select2();
+
         })
+
+        $('.input-images-1').imageUploader({
+            imagesInputName: 'image-prod',
+        });
+
+        $('#tag-suggestion').ready(function() {
+            $("#tag-suggesstion").hide();
+        })
+
+        $(document).ready(function() {
+            $("#tag").keyup(function() {
+                var tagValue = $('#tag').val();
+                $.ajax({
+                    type: "GET",
+                    url: `{{ route('get.tag') }}`,
+                    data: {
+                        tag: tagValue,
+                    },
+                    success: function(data) {
+                        // console.log(data);return;
+                        var option = ''
+                        $.each(data, function(index, item) {
+                            option += `<option > ${item.name} </option>`;
+                            $('#tag-suggesstion').click(function() {
+                                selectTag(item.name);
+                            });
+                        });
+                        $("#tag-suggesstion").show();
+                        $("#tag-suggesstion").html(option);
+                        $("#tag").css("background", "#FFF");
+                        // response(data);
+                    }
+                });
+
+            });
+        });
+        //To select a country name
+        function selectTag(val) {
+            $("#tag").val(val);
+            $("#tag-suggesstion").hide();
+        }
     </script>
 @endpush

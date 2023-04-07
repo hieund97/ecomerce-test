@@ -28,4 +28,14 @@ class Blogs extends Model
     {
         return $this->belongsTo(Categories::class, 'category_id', 'id');
     }
+
+    /**
+     * The tag that belong to the Blogs
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tag()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_pivot ', 'related_id', 'tag_id');
+    }
 }

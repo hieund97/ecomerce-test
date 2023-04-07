@@ -24,7 +24,7 @@ Route::group([
     'namespace' => 'App\Http\Controllers\admin'
 ], function(){
     Route::get('/', 'DashboardController@index')->name('dashboard');
-    Route::get('/products', 'DashboardController@products')->name('products');  
+    Route::get('/products', 'DashboardController@products')->name('products');
     Route::get('/categories', 'DashboardController@categories')->name('categories');
     Route::get('/blogs', 'DashboardController@blogs')->name('blogs');
     // Route users
@@ -89,10 +89,36 @@ Route::group([
         Route::get('/', 'ProductsController@index')->name('list.products');
         Route::get('/create', 'ProductsController@create')->name('create.products');
         Route::post('/store', 'ProductsController@store')->name('store.products');
+        Route::get('/get-tag', 'ProductsController@getTag')->name('get.tag');
         Route::get('/edit/{id}', 'ProductsController@edit')->name('edit.products');
         Route::put('/update', 'ProductsController@update')->name('update.products');
         Route::delete('/delete/product', 'ProductsController@destroy')->name('delete.products');
         Route::post('/update/status/{id}', 'ProductsController@updateStatus')->name('updateStatus.product');
+    });
+
+    // Route slider
+    Route::group([
+        'prefix' => 'slider'
+    ], function(){
+        Route::get('/', 'SlidersController@index')->name('list.slider');
+        Route::get('/create', 'SlidersController@create')->name('create.slider');
+        Route::post('/store', 'SlidersController@store')->name('store.slider');
+        Route::get('/get-related-url', 'SlidersController@getRelatedID')->name('get.related.id');
+        Route::get('/edit/{id}', 'SlidersController@edit')->name('edit.slider');
+        Route::put('/update', 'SlidersController@update')->name('update.slider');
+        Route::delete('/delete/{id}', 'SlidersController@destroy')->name('delete.slider');
+    });
+
+    //Route Tag
+    Route::group([
+        'prefix' => 'tag'
+    ], function(){
+        Route::get('/', 'TagsController@index')->name('list.tag');
+        Route::get('/create', 'TagsController@create')->name('create.tag');
+        Route::post('/store', 'TagsController@store')->name('store.tag');
+        Route::get('/edit/{id}', 'TagsController@edit')->name('edit.tag');
+        Route::put('/update', 'TagsController@update')->name('update.tag');
+        Route::delete('/delete/{id}', 'TagsController@destroy')->name('delete.tag');
     });
 });
 
@@ -102,5 +128,11 @@ Route::group([
 Route::group([
     'namespace' => 'App\Http\Controllers\client'
 ], function(){
-    Route::get('/', 'MainController@index')->name('index');
+    Route::get('/', 'MainController@index')->name('index.client');
+    Route::group([
+        'prefix' => 'product'
+    ], function(){
+        Route::get('/', 'ProductsController@index')->name('index.product');
+        Route::get('/{slug}', 'ProductsController@detail')->name('index.product.detail');
+    });
 });

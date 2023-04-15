@@ -31,7 +31,7 @@
                         <div class="card card-primary">
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="{{ route('store.blogs') }}" method="POST">
+                            <form action="{{ route('store.blogs') }}" method="POST" enctype="multipart/form-data" style="display:inline">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -47,7 +47,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
-                                        <label for="description">Descrition</label>
+                                        <label for="description">Description</label>
                                         <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" id="description" name="description"
                                             placeholder="Enter description"> </textarea>
                                         @if ($errors->has('description'))
@@ -83,6 +83,36 @@
                                             <option value="0">Unapproved</option>
                                         </select>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-6 col-md-6 col-lg-6">
+                                            <label for="customFile">Primary Image<span style="color: red">*</span></label>
+                                            <div class="card card-profile">
+                                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                                    <div class="fileinput-new thumbnail mt-4">
+                                                        <img src="{{ asset('/img/noimage.png') }}">
+                                                    </div>
+                                                    <div
+                                                        class="fileinput-preview fileinput-exists thumbnail img-fluid mt-4">
+                                                    </div>
+                                                    <div>
+                                                        <span class="btn btn-primary btn-round btn-file">
+                                                            <span class="fileinput-new">Select image</span>
+                                                            <span class="fileinput-exists">Change</span>
+                                                            <input type="file" id="image_slider" name="image" />
+                                                        </span>
+                                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-6 col-lg-6">
+                                            <div class="input-field">
+                                                <label class="active">Related Image<span style="color: red">*</span></label>
+                                                <div class="input-images-1" style="padding-top: .5rem;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -105,5 +135,9 @@
 @push('js')
     <script>
         CKEDITOR.replace('blog_detail');
+
+        $('.input-images-1').imageUploader({
+            imagesInputName: 'blog-image',
+        });
     </script>
 @endpush

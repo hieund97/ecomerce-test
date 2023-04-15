@@ -38,4 +38,14 @@ class Blogs extends Model
     {
         return $this->belongsToMany(Tag::class, 'tag_pivot ', 'related_id', 'tag_id');
     }
+
+    /**
+     * Get all of the image for the Blogs
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function image()
+    {
+        return $this->hasMany(ImageValues::class, 'related_id', 'id');
+    }
 }

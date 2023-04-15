@@ -10,6 +10,15 @@ return[
     ],
 
     /**
+     * Blog status (Approve)
+     */
+    'blog_status' => [ 
+        'unapprove' => 0,
+        'approving' => 1,
+        'approved'  => 2,
+    ],
+
+    /**
      * Number of category on FE products
      */
     'show_category' => 20,
@@ -30,11 +39,20 @@ return[
     'destination_path' => 'public/images',
 
     /**
+     * type_of_category
+     */
+    'category_type' => [
+        'product' => 0,
+        'blog'    => 1,
+    ],
+
+    /**
      * image type
      */
     'image_type' => [
         'product' => 1,
         'slider'  => 2,
+        'blog'    => 3,
     ],
 
     /**
@@ -43,6 +61,7 @@ return[
     'type_image_path' => [
         'product' => 'product',
         'slider'  => 'slider',
+        'blog'    => 'blog',
     ],
 
     /**
@@ -58,6 +77,6 @@ return[
      */
     'type_of_tag' =>[
         'product' => 1,
-        'blog' => 2,
+        'blog'    => 2,
     ],
 ];

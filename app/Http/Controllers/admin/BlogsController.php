@@ -31,7 +31,7 @@ class BlogsController extends Controller
      */
     public function create()
     {
-        $aryCategories = Categories::where('type', 1)->get();
+        $aryCategories = Categories::where('type', config('handle.category_type.blog'))->get();
         return view('admin/blogs/create', compact('aryCategories'));
     }
 
@@ -61,7 +61,13 @@ class BlogsController extends Controller
             return redirect(route('create.blogs'))->withErrors($validator)->withInput($request->all());
         }
 
-        Blogs::create([
+        $aryImage = [];
+        foreach ($request->file('blog-image') as $key => $value) {
+            $aryImage[] = $value;
+        }
+        $aryImage['primary'] = $request->file('image');
+
+        $blog = Blogs::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name, '-'),
             'detail' => $request->detail,
@@ -69,6 +75,8 @@ class BlogsController extends Controller
             'category_id' => $request->category_id,
             'description' => $request->description,
         ]);
+        processImage($aryImage, $blog->id, config('handle.type_image_path.blog'));
+
         session()->flash('create_complete', 'success');
         return redirect(route('list.blogs'));
     }

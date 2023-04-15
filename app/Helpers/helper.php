@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ImageValues;
+use Carbon\Carbon;
 
 function generateVariant($data)
 {
@@ -32,31 +33,44 @@ function generateVariant($data)
  * @param boolean $isPrimary
  * @return boolean
  */
-function processImage($files = [], $related_id, $type, $isPrimary = false)
+function processImage($files = [], $related_id, $type, $isPrimary = false, $isUpdate = false)
 {
     // input dau vao la file (1 file hoac nhieu file)
-    if (is_array($files)) {
-        $aryRelatedImageName = [];
-        foreach ($files as $key => $image) {
-            $isPrimary = false;
-            if($key === 'primary'){
-                $isPrimary = true;
-            } 
+    try {
+        if (is_array($files)) {
+            $aryRelatedImageName = [];
+            foreach ($files as $key => $image) {
+                $isPrimary = false;
+                if ($key === 'primary') {
+                    $isPrimary = true;
+                }
 
-            $destination_path = config('handle.destination_path');
-            $imageName             = $type.'/'. $image->getClientOriginalName();
-            $image->storeAs($destination_path, $imageName);
-            $aryRelatedImageName[] = [
-                'name'       => $imageName,
-                'is_primary' => $isPrimary 
-                    ? config('handle.primary_image.primary') 
-                    : config('handle.primary_image.not_primary'),
-                'related_id' => $related_id,
-                'image_type' => config('handle.image_type.slider'),
-            ];
+                $destination_path      = config('handle.destination_path');
+                $imageName             = $type . '/' . $image->getClientOriginalName();
+                $image->storeAs($destination_path, $imageName);
+                $aryRelatedImageName[] = [
+                    'name'       => $imageName,
+                    'is_primary' => $isPrimary
+                        ? config('handle.primary_image.primary')
+                        : config('handle.primary_image.not_primary'),
+                    'related_id' => $related_id,
+                    'image_type' => config('handle.image_type.' . $type),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+
+                ];
+            }
+            if ($isUpdate) {
+                ImageValues::where('related_id', $related_id)->get()->each(function ($image) {
+                    $image->delete();
+                });
+            }
+
+            return ImageValues::insert($aryRelatedImageName);
         }
-
-        return ImageValues::insert($aryRelatedImageName);
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return false;
     }
 
     return false;

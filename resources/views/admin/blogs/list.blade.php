@@ -65,7 +65,7 @@
                                         <td>{{ $blog->categories['name'] }}</td>
                                         <td>{{ $blog->description }}</td>
                                         <td>
-                                            @switch($blog->status == 0)
+                                            @switch($blog->status)
                                                 @case(0)
                                                     {{ 'Unapproved' }}
                                                 @break

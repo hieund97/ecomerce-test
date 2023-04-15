@@ -21,7 +21,7 @@ class SlidersController extends Controller
      */
     public function index()
     {
-        $arySlider = Slider::with('image')->paginate(5);
+        $arySlider = Slider::with(['image'=>function($q){$q->where('image_type', config('handle.image_type.slider'));}])->paginate(5);
         return view('admin.slider.list', compact('arySlider'));
     }
 

@@ -83,7 +83,9 @@
                                         <div class="card card-profile">
                                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                                 <div class="fileinput-new thumbnail mt-4">
-                                                    <img style="max-height: 400px" src="{{ asset('storage/images/' . $slider->image) }}">
+                                                    @foreach ($slider->image as $item)
+                                                    <img style="max-height: 400px" src="{{ asset('storage/images/' . $item->name) }}">
+                                                    @endforeach
                                                 </div>
                                                 <div class="fileinput-preview fileinput-exists thumbnail img-fluid mt-4">
                                                 </div>

@@ -168,10 +168,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="customFile">Primary Image</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile" name="image" />
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            <label for="customFile">Primary Image<span style="color: red">*</span></label>
+                            <div class="card card-profile">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail mt-4">
+                                        <img src="{{ asset('/img/noimage.png') }}">
+                                    </div>
+                                    <div
+                                        class="fileinput-preview fileinput-exists thumbnail img-fluid mt-4">
+                                    </div>
+                                    <div>
+                                        <span class="btn btn-primary btn-round btn-file">
+                                            <span class="fileinput-new">Select image</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" id="image_product" name="image" />
+                                        </span>
+                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,42 +214,5 @@
         $('.input-images-1').imageUploader({
             imagesInputName: 'image-prod',
         });
-
-        $('#tag-suggestion').ready(function() {
-            $("#tag-suggesstion").hide();
-        })
-
-        $(document).ready(function() {
-            $("#tag").keyup(function() {
-                var tagValue = $('#tag').val();
-                $.ajax({
-                    type: "GET",
-                    url: `{{ route('get.tag') }}`,
-                    data: {
-                        tag: tagValue,
-                    },
-                    success: function(data) {
-                        // console.log(data);return;
-                        var option = ''
-                        $.each(data, function(index, item) {
-                            option += `<option > ${item.name} </option>`;
-                            $('#tag-suggesstion').click(function() {
-                                selectTag(item.name);
-                            });
-                        });
-                        $("#tag-suggesstion").show();
-                        $("#tag-suggesstion").html(option);
-                        $("#tag").css("background", "#FFF");
-                        // response(data);
-                    }
-                });
-
-            });
-        });
-        //To select a country name
-        function selectTag(val) {
-            $("#tag").val(val);
-            $("#tag-suggesstion").hide();
-        }
     </script>
 @endpush

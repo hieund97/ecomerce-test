@@ -92,6 +92,7 @@ Route::group([
         Route::get('/get-tag', 'ProductsController@getTag')->name('get.tag');
         Route::get('/edit/{id}', 'ProductsController@edit')->name('edit.products');
         Route::put('/update', 'ProductsController@update')->name('update.products');
+        Route::put('/update/variant', 'ProductsController@updateVariantPrice')->name('update.variant.price');
         Route::delete('/delete/product', 'ProductsController@destroy')->name('delete.products');
         Route::post('/update/status/{id}', 'ProductsController@updateStatus')->name('updateStatus.product');
     });
@@ -134,5 +135,11 @@ Route::group([
     ], function(){
         Route::get('/', 'ProductsController@index')->name('index.product');
         Route::get('/{slug}', 'ProductsController@detail')->name('index.product.detail');
+    });
+    Route::group([
+        'prefix' => 'blog'
+    ], function(){
+        Route::get('/', 'BlogsController@index')->name('index.blog');
+        Route::get('/{slug}', 'BlogsController@detail')->name('blog.detail');
     });
 });

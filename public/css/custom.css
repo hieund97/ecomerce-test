@@ -126,3 +126,15 @@
     max-width: 50%;
 }
 
+#variant-price-table{
+    margin: auto;
+    width: 100%;
+}
+
+#variant{
+    padding: 5px;
+    text-align: left;
+    border: 1px solid #333;
+    vertical-align: top;
+}
+

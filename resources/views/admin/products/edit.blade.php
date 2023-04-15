@@ -86,7 +86,8 @@
                             <!-- /.card -->
                             <div class="input-field">
                                 <label class="active">Related Image</label>
-                                <div class="input-images-1" style="padding-top: .5rem;"></div>
+                                <div class="input-images-1" style="padding-top: .5rem;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,10 +166,26 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="customFile">Image product</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="image_product" name="image" />
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            <label for="customFile">Primary Image<span style="color: red">*</span></label>
+                            <div class="card card-profile">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail mt-4">
+                                        @foreach ($primaryImage as $image)
+                                            <img src="{{ asset('storage/images/' . $image->name) }}">
+                                        @endforeach
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail img-fluid mt-4">
+                                    </div>
+                                    <div>
+                                        <span class="btn btn-primary btn-round btn-file">
+                                            <span class="fileinput-new">Select image</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" id="image_product" name="image" />
+                                        </span>
+                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists"
+                                            data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -176,6 +193,43 @@
                         Submit
                     </button>
                 </div>
+            </div>
+            <div class="card col-12 col-md-12 col-lg-12 p-3">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="4">Variant Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center"><b>Size</b></td>
+                            <td class="text-center"><b>Color</b></td>
+                            <td class="text-center"><b>Price</b></td>
+                            <td class="text-center"><b>Action</b></td>
+                        </tr>
+                        @foreach ($aryVariant as $variant)
+                            <tr>
+                                <td class="text-center">{{ $variant->values[0]->name }}</td>
+                                <td class="text-center">{{ $variant->values[1]->name }}</td>
+                                <td class="text-center variant-price-{{ $variant->id }}">{{ $variant->price }}</td>
+                                <td width="10%" class="text-center">
+                                    <button type="button"
+                                        onclick="editVariant({{ $variant->id }}, {{ $variant->price }})"
+                                        class="btn btn-edit btn-primary btn-edit-variant-{{ $variant->id }}"
+                                        data-id="{{ $variant->id }}"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button"
+                                        onclick="submitVariant({{ $variant->id }}, {{ $variant->price }})"
+                                        class="btn btn-submit btn-success btn-submit-variant-{{ $variant->id }}"
+                                        data-id="{{ $variant->id }}"><i class="fas fa-check"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </form>
 
@@ -187,15 +241,14 @@
     <script>
         CKEDITOR.replace('product_detail');
 
-        $(document).ready(function() {
-            $('.related_product').select2();
-        })
 
         $('.input-images-1').imageUploader({
             imagesInputName: 'image-prod',
         });
 
         $(document).ready(function() {
+            $('.btn-submit').hide();
+
             $('.related_product').select2();
 
             //Edit products
@@ -216,7 +269,9 @@
                     return this.value
                 }).get();
                 var imageValue = $('#image_product').prop('files')[0];
-                var aryImage = document.getElementByName('image-prod');
+                var relatedImage = $("#image-prod").prop('files');
+
+                // var aryImage = document.getElementByName('image-prod');
                 var aryAttributeValue = [];
                 @foreach ($aryAttributeType as $key => $type)
                     aryAttributeValue['{{ $type->id }}'] = $(
@@ -242,10 +297,10 @@
                 formData.append('related_product_id', relatedValue);
                 formData.append('category', JSON.stringify(aryCategoryValue));
                 formData.append('attribute_value', JSON.stringify(aryAttributeValue));
-                if ($('#image_product').get(0).files.length !== 0) {
-                    var imageValue = $('#image_product').prop('files')[0];
-                    formData.append('image', imageValue);
-                }
+                $.each(relatedImage, function(index, value) {
+                    formData.append('related_image[' + index + ']', value);
+                });
+                formData.append(`related_image[primary]`, imageValue);
                 $.ajax({
                     url: '{{ route('update.products') }}',
                     method: 'POST',
@@ -266,5 +321,38 @@
                 })
             });
         })
+
+        function editVariant(id, price) {
+            var inputPrice = `<input type="text" id="variant-price-${id}" value="${price}">`
+            $(".variant-price-" + id).html(inputPrice);
+            $('.btn-edit-variant-' + id).hide();
+            $('.btn-submit-variant-' + id).show();
+        }
+
+        function submitVariant(id, price) {
+            var price = $('#variant-price-' + id).val();
+
+            var formData = new FormData();
+            formData.append('_method', 'PUT');
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('id', id);
+            formData.append('price', price);
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('update.variant.price') }}",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    toastr.success('Edit price successfully!');
+                    $(".variant-price-" + id).html(`${price}`);
+                    $('.btn-submit-variant-' + id).hide();
+                    $('.btn-edit-variant-' + id).show();
+                }
+            });
+
+        }
     </script>
 @endpush

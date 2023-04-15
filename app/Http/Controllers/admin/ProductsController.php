@@ -25,7 +25,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $aryProduct = Products::with('categories', 'image')->paginate(5);
+        $aryProduct = Products::with(['categories', 'image'=>function($q){$q->where('image_type', config('handle.image_type.product'));}])->paginate(5);
         $aryImage = ImageValues::where('is_primary', 1)->get();
         return view('admin.products.list', compact('aryProduct', 'aryImage'));
     }
@@ -50,8 +50,14 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
+        $aryImage = [];
+        foreach ($request->file('image-prod') as $key => $value) {
+            $aryImage[] = $value;
+        }
+        $aryImage['primary'] = $request->file('image');
+
         try {
             DB::beginTransaction();
             $product = Products::create([
@@ -69,21 +75,21 @@ class ProductsController extends Controller
                 'related_product_id' => $request->has('related_product_id') ? implode(',', $request->related_product_id) : null,
             ]);
 
-            $image = $this->processImage($request, $product);
-            
+            processImage($aryImage, $product->id, config('handle.type_image_path.product'));
+
             // Attach Category
             $product->categories()->attach($request->category);
-            
+
+            //Attach Tag
+            $product->tag()->attach($request->tag);
+
             // Attach Value
             $arrayValue = $this->adjustAttributeValue($request->attribute_value);
             $product->attribute_value()->attach($arrayValue);
-            
+
             // Create variant
             $this->createVariant($request->attribute_value, $product);
-            
-            //Create image
-            ImageValues::insert($image);
-            
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -106,7 +112,15 @@ class ProductsController extends Controller
         $aryProduct = Products::select('id', 'name')->get();
         $aryAttributeType = AttributeTypes::with('attributesValue')->get();
         $aryCategory = Categories::all();
-        return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product', 'aryProduct'));
+        $aryVariant = Variant::with('values')
+            ->where('product_id', $id)
+            ->get();
+        $primaryImage = ImageValues::where('image_type', config('handle.image_type.product'))
+            ->where('related_id', $id)
+            ->where('is_primary', config('handle.primary_image.primary'))
+            ->get();
+        // dd($primaryImage);
+        return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product', 'aryProduct', 'aryVariant', 'primaryImage'));
     }
 
     /**
@@ -119,6 +133,7 @@ class ProductsController extends Controller
     public function update(ProductRequest $request)
     {
         $product = Products::findOrFail($request->id);
+
         try {
             DB::beginTransaction();
 
@@ -136,8 +151,8 @@ class ProductsController extends Controller
                 'details' => $request->details,
                 'related_product_id' => !empty($request->related_product_id) ? implode(',', $request->related_product_id) : null,
             ]);
-            $imageName = $this->processImage($request, $product);
 
+            processImage($request->related_image, $product->id, config('handle.type_image_path.product'), false, true);
 
             //Category
             $product->categories()->sync(json_decode($request->category, true));
@@ -151,21 +166,8 @@ class ProductsController extends Controller
                 $variant->values()->detach();
                 $variant->delete();
             });
-            
-            $aryVariant = generateVariant(json_decode($request->attribute_value, true));
-            foreach ($aryVariant as $key => $var) {
-                $variant = Variant::create([
-                    'product_id' => $product->id,
-                    'price' => $product->price
-                ]);
-                $variant->values()->attach($var);
-            }
 
-            //Create image
-            ImageValues::where('related_id', $product->id)->get()->each(function($image){
-                $image->delete();
-            });
-            ImageValues::insert($imageName);
+            $this->createVariant(json_decode($request->attribute_value, true), $product);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -278,53 +280,15 @@ class ProductsController extends Controller
         return true;
     }
 
-    /**
-     * Function to find and save image
-     *
-     * @param [type] $request
-     * @return void
-     */
-    private function processImage($request, $product){
-        $aryImage = [];
-        $destination_path = config('handle.destination_path');
-        $image = $request->file('image');
-        $primaryImage = 'products/'.$image->getClientOriginalName();
-        $request->file('image')->storeAs($destination_path, $primaryImage);
+    public function updateVariantPrice(Request $request)
+    {
+        $variant = Variant::findOrFail($request->id);
+        $variant->update([
+            'price' => $request->price
+        ]);
 
-        $aryPrimaryImage = [
-            'name' => $primaryImage,
-            'is_primary' => config('handle.primary_image.primary'),
-            'related_id' => $product->id,
-            'image_type' => config('handle.image_type.product'),
-        ];
-        array_push($aryImage, $aryPrimaryImage);
-        
-        $aryRelatedImageName = [];
-        foreach ($request->file('image-prod') as $key => $image) {
-            $destination_path = config('handle.destination_path');
-            $imageName = 'products/'.$image->getClientOriginalName();
-            $request->file('image')->storeAs($destination_path, $imageName);
-            $aryRelatedImageName[] = $imageName;
-        }
+        return response()->json(['message' => 'success'], 200);
 
-        foreach ($aryRelatedImageName as $key => $image) {
-            $aryRelatedImage = [
-                'name' => $image,
-                'is_primary' => config('handle.primary_image.not_primary'),
-                'related_id' => $product->id,
-                'image_type' => config('handle.image_type.product'),
-            ];
-            array_push($aryImage, $aryRelatedImage);
-        }
-
-        return $aryImage;
-    }
-
-    public function getTag (Request $request){
-        $data = Tag::select("name")
-                    ->where('name', 'LIKE', '%'. $request->get('tag'). '%')
-                    ->get();
-        return response()->json($data, 200);
     }
 }
 

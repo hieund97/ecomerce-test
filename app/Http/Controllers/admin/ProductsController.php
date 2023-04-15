@@ -52,6 +52,7 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        //generate image to array
         $aryImage = [];
         foreach ($request->file('image-prod') as $key => $value) {
             $aryImage[] = $value;
@@ -119,7 +120,6 @@ class ProductsController extends Controller
             ->where('related_id', $id)
             ->where('is_primary', config('handle.primary_image.primary'))
             ->get();
-        // dd($primaryImage);
         return view('admin.products.edit', compact('aryAttributeType', 'aryCategory', 'product', 'aryProduct', 'aryVariant', 'primaryImage'));
     }
 

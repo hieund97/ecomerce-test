@@ -135,6 +135,7 @@ Route::group([
     ], function(){
         Route::get('/', 'ProductsController@index')->name('index.product');
         Route::get('/{slug}', 'ProductsController@detail')->name('index.product.detail');
+        Route::post('/get-variant', 'ProductsController@getVariant')->name('get.variant');
     });
     Route::group([
         'prefix' => 'blog'

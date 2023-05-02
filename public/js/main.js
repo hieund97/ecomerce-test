@@ -110,6 +110,11 @@
         $(this).addClass('active');
     });
 
+    $(".product__details__option__color label").on('click', function () {
+        $(".product__details__option__color label").removeClass('active');
+        $(this).addClass('active');
+    });
+
     /*-------------------
 		Scroll
 	--------------------- */

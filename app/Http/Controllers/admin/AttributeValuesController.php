@@ -45,7 +45,8 @@ class AttributeValuesController extends Controller
 
         AttributeValues::create([
             'name' => $request->name,
-            'attribute_id' => $request->attribute_id
+            'attribute_id' => $request->attribute_id,
+            'color_id' => $request->color_id,
         ]);
 
         session()->flash('create_success', 'success');
@@ -61,8 +62,7 @@ class AttributeValuesController extends Controller
     public function edit($id)
     {
         $value = AttributeValues::findOrFail($id);
-        $aryAttributeTypes = AttributeTypes::all();
-        return view('admin.attributes.value.edit', compact('value', 'aryAttributeTypes'));
+        return view('admin.attributes.value.edit', compact('value'));
     }
 
     /**
@@ -90,7 +90,8 @@ class AttributeValuesController extends Controller
         $value = AttributeValues::findOrFail($id);
         $value->update([
             'name' => $request->name,
-            'attribute_id' => $request->attribute_id
+            'attribute_id' => $request->attribute_id,
+            'color_id' => $request->color_id,
         ]);
 
         session()->flash('update_success', 'success');

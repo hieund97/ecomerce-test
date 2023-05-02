@@ -24,7 +24,7 @@
             <div class="container-fluid">
                 {{-- Table --}}
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-9 col-md-9 col-lg-9">
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-body table-responsive p-0">
@@ -32,9 +32,10 @@
                                     <thead>
                                         <tr>
                                             <th width='20%'>ID</th>
-                                            <th width='40%'>Name</th>
-                                            <th width='30%'>Attribute Type</th>
-                                            <th width='20%'>Action</th>
+                                            <th width='20%'>Name</th>
+                                            <th width='20%'>Attribute Type</th>
+                                            <th width='30%'>Color</th>
+                                            <th width='10%'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -43,6 +44,10 @@
                                                 <td>{{ $value->id }}</td>
                                                 <td>{{ $value->name }}</td>
                                                 <td>{{ $value->attributesType['name'] }}</td>
+                                                <td class="row">
+                                                    <div style="width: 30px; height: 30px; background-color: {{$value->color_id}}; border-radius:50%;" class="mr-3"></div>
+                                                    <p>{{$value->color_id}}</p>
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('edit.attributeValues', $value->id) }}"
                                                         class="btn btn-primary"><i class="fas fa-edit"></i></a>
@@ -67,7 +72,7 @@
                     </div>
                     {{-- Create --}}
                     <!-- left column -->
-                    <div class="col-md-6">
+                    <div class="col-3 col-md-3 col-lg-3">
                         <!-- general form elements -->
                         <div class="card card-primary">
                             <!-- /.card-header -->
@@ -88,12 +93,16 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Attribute Type</label>
-                                        <select class="form-control" name="attribute_id">
+                                        <select class="form-control attr-type" name="attribute_id">
                                             @foreach ($aryAttributeTypes as $type)
-                                                <option value='{{ $type->id }}'> {{ $type->name }}
+                                                <option value='{{ $type->id }}' id="attr-type"> {{ $type->name }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                    <div class="form-group color-picker" style="display: none">
+                                        <label class="mr-3">Color Picker</label>
+                                        <input type="color" id="color-picker" name="color_id">
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
@@ -115,3 +124,19 @@
     <!-- /.content-wrapper -->
 
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function () {
+            $('.color-picker').hide();
+            $('.attr-type').on('change', function () {
+                if ($('.attr-type').val() == "{{ config('handle.attribute_type.color') }}") {
+                    $('.color-picker').show();
+                }
+                else{
+                    $('.color-picker').hide();
+                }
+            });
+        });
+
+    </script>
+@endpush

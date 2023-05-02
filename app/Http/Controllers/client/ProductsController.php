@@ -22,7 +22,7 @@ class ProductsController extends Controller
     {
         $aryCategory = Categories::where('status', 1)->limit(config('handle.show_category'))->get();
         $aryProduct = Products::with(['image' => function($q){ $q->where('is_primary', config('handle.primary_image.primary'))->where('image_type', config('handle.image_type.product')); }])
-            ->where('status', 1)
+            ->where('status', config('handle.status.on'))
             ->limit(config('handle.show_product'))
             ->get();
         return view('client.product', compact('aryCategory', 'aryProduct'));

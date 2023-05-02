@@ -37,8 +37,10 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name"
-                                            value="{{ $value->name }}" placeholder="Enter name" />
+                                        <input type="text"
+                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            id="name" name="name" value="{{ $value->name }}"
+                                            placeholder="Enter name" />
                                         @if ($errors->has('name'))
                                             <div id="nameFeedback" class="invalid-feedback">
                                                 {{ $errors->first('name') }}
@@ -48,12 +50,23 @@
                                     <div class="form-group">
                                         <label>Attribute Type</label>
                                         <select class="form-control" name="attribute_id">
-                                            @foreach ($aryAttributeTypes as $type)
-                                                <option value='{{ $type->id }}'> {{ $type->name }}
-                                                </option>
-                                            @endforeach
+                                            <option
+                                                {{ $value->attribute_id == config('handle.attribute_type.size') ? 'selected' : '' }}
+                                                value='{{ config('handle.attribute_type.size') }}'> Size
+                                            </option>
+                                            <option
+                                                {{ $value->attribute_id == config('handle.attribute_type.color') ? 'selected' : '' }}
+                                                value='{{ config('handle.attribute_type.color') }}'> Color
+                                            </option>
                                         </select>
                                     </div>
+                                    @if ($value->attribute_id == config('handle.attribute_type.color'))
+                                        <div class="form-group color-picker">
+                                            <label class="mr-3">Color Picker</label>
+                                            <input type="color" id="color-picker" name="color_id"
+                                                value="{{ $value->color_id }}">
+                                        </div>
+                                    @endif
                                     <!-- /.card-body -->
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">

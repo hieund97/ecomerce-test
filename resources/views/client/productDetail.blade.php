@@ -7,6 +7,7 @@
         <div class="loader"></div>
     </div>
     <!-- Shop Details Section Begin --> --}}
+   
     <section class="shop-details">
         <div class="product__details__pic">
             <div class="container">
@@ -22,61 +23,27 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg"
-                                        data-setbg="{{ asset('storage/images/' . $product->image) }}">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                    <div class="product__thumb__pic set-bg"
-                                        data-setbg="{{ asset('storage/images/' . $product->image) }}">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                    <div class="product__thumb__pic set-bg"
-                                        data-setbg="{{ asset('storage/images/' . $product->image) }}">
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                    <div class="product__thumb__pic set-bg"
-                                        data-setbg="{{ asset('storage/images/' . $product->image) }}">
-                                        <i class="fa fa-play"></i>
-                                    </div>
-                                </a>
-                            </li>
+                            @foreach ($product->image as $key => $image)
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-{{ $key }}" role="tab">
+                                        <div class="product__thumb__pic set-bg"
+                                            data-setbg="{{ asset('storage/images/' . $image->name) }}">
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="col-lg-6 col-md-9">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="{{ asset('storage/images/' . $product->image) }}" alt="">
+                            @foreach ($product->image as $key => $image)
+                                <div class="tab-pane {{ $image->is_primary == 1 ? 'active' : '' }}"
+                                    id="tabs-{{ $key }}" role="tabpanel">
+                                    <div class="product__details__pic__item">
+                                        <img src="{{ asset('storage/images/' . $image->name) }}" alt="">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-3.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big.png" alt="">
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-4" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-4.png" alt="">
-                                    <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1"
-                                        class="video-popup"><i class="fa fa-play"></i></a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -96,36 +63,32 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3>${{ $product->price }} <span>70.00</span></h3>
+                            <h3 class="price">
+                                {{-- <span>70.00</span> --}}
+                            </h3>
                             <p>{{ $product->description }}</p>
                             <div class="product__details__option row">
                                 @foreach ($aryType as $type)
                                     <div
-                                        class="product__details__option__{{ $type->name }} col-lg-6 col-md-6 col-sm-6 d-flex align-items-center justify-content-center">
+                                        class="product__details__option__{{ strtolower($type->name) }} col-lg-6 col-md-6 col-sm-6 d-flex align-items-center justify-content-center">
                                         <span>{{ $type->name }}:</span>
-                                        @foreach ($product->attribute_value as $value)
+                                        @foreach ($product->attribute_value as $key => $value)
                                             @if ($value->attribute_id == $type->id)
-                                                <label for="{{ $value->name }}"
+                                                <label
+                                                    class="{{ $value->attribute_id == config('handle.attribute_type.color') ? 'label-color' : 'label-size' }}"
+                                                    style="background-color: {{ $value->color_id }}"
+                                                    data-id="{{ $value->id }}"
+                                                    for="{{ $value->name }}"
                                                     title="{{ $value->name }}">{{ $value->attribute_id == 1 ? $value->name : '' }}
-                                                    <input type="radio" id="{{ $value->name }}">
+                                                    <input name="attr-{{ strtolower($type->name) }}" class="label-attribute" type="radio" value="{{ $value->id }}" id="{{ $value->name }}"
+                                                        data-type="{{ $value->attribute_id }}"
+                                                        data-product="{{ $product->id }}">
                                                 </label>
                                             @endif
                                         @endforeach
-
-                                        {{-- <div class="col-md-2">
-                                                <span>Color:</span>
-                                            </div>
-                                            <div class="col-md-10 text-left">
-                                                <label class="" for="{{ $value->name }}" data-toggle="tooltip"
-                                                    data-placement="top" title="{{ $value->name }}">
-                                                    <input type="radio" id="{{ $value->name }}">
-                                                </label>
-                                            </div> --}}
                                     </div>
                                 @endforeach
                             </div>
-
-
 
                             <div class="product__details__cart__option">
                                 <div class="quantity">
@@ -149,7 +112,11 @@
                                         </span> {{ $item->name }} |
                                         @endforeach
                                     </li>
-                                    <li><span>Tag:</span> Clothes, Skin, Body</li>
+                                    <li><span>Tag:</span>
+                                        @foreach ($product->tag as $tag)
+                                            {{ $tag->name . ', ' }}
+                                        @endforeach
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -289,46 +256,49 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($relatedProduct as $relatedProduct)
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg"
-                                data-setbg="{{ asset('storage/images/' . $relatedProduct->image) }}">
-                                <span class="label">New</span>
-                                <ul class="product__hover">
-                                    <li><a href="#"><img src="{{ asset('img/icon/heart.png') }}"
-                                                alt=""></a></li>
-                                    <li><a href="#"><img src="{{ asset('img/icon/compare.png') }}" alt="">
-                                            <span>Compare</span></a></li>
-                                    <li><a href="{{ route('index.product.detail', $relatedProduct->slug) }}"><img
-                                                src="{{ asset('img/icon/search.png') }}" alt=""></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6>{{ $relatedProduct->name }}</h6>
-                                <a href="#" class="add-cart">+ Add To Cart</a>
-                                <div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
+                @foreach ($relatedProducts as $relatedProduct)
+                    @foreach ($relatedProduct->image as $image)
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg"
+                                    data-setbg="{{ asset('storage/images/' . $image->name) }}">
+                                    <span class="label">New</span>
+                                    <ul class="product__hover">
+                                        <li><a href="#"><img src="{{ asset('img/icon/heart.png') }}"
+                                                    alt=""></a></li>
+                                        <li><a href="#"><img src="{{ asset('img/icon/compare.png') }}"
+                                                    alt="">
+                                                <span>Compare</span></a></li>
+                                        <li><a href="{{ route('index.product.detail', $relatedProduct->slug) }}"><img
+                                                    src="{{ asset('img/icon/search.png') }}" alt=""></a></li>
+                                    </ul>
                                 </div>
-                                <h5>{{ $relatedProduct->price }}</h5>
-                                <div class="product__color__select">
-                                    <label for="pc-1">
-                                        <input type="radio" id="pc-1">
-                                    </label>
-                                    <label class="active black" for="pc-2">
-                                        <input type="radio" id="pc-2">
-                                    </label>
-                                    <label class="grey" for="pc-3">
-                                        <input type="radio" id="pc-3">
-                                    </label>
+                                <div class="product__item__text">
+                                    <h6>{{ $relatedProduct->name }}</h6>
+                                    <a href="#" class="add-cart">+ Add To Cart</a>
+                                    <div class="rating">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <h5>${{ $relatedProduct->price }}</h5>
+                                    <div class="product__color__select">
+                                        <label for="pc-1">
+                                            <input type="radio" id="pc-1">
+                                        </label>
+                                        <label class="active black" for="pc-2">
+                                            <input type="radio" id="pc-2">
+                                        </label>
+                                        <label class="grey" for="pc-3">
+                                            <input type="radio" id="pc-3">
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 @endforeach
             </div>
         </div>
@@ -336,5 +306,46 @@
     <!-- Related Section End -->
 @endsection
 @push('js')
-    <script></script>
+    <script>
+        $(document).ready(function() {
+            var parentColor = $('.product__details__option__color');
+            var parentSize = $('.product__details__option__size');
+
+            parentColor.find('.label-color:first').addClass('active');
+            parentSize.find('.label-size:first').addClass('active');
+
+            var colorID = parentColor.find('.active').data('id');
+            var sizeID = parentSize.find('.active').data('id');
+            getVariant(colorID, sizeID, '{{ $product->id }}')
+
+            $('.label-attribute').on('change', function() {
+                var id = $(this).val();
+                var type = $(this).data('type');
+                var productID = $(this).data('product');
+                if (type == "{{ config('handle.attribute_type.size') }}") {
+                    sizeID = id;
+                } else {
+                    colorID = id;
+                }
+                getVariant(colorID, sizeID, productID);
+            });
+        });
+
+        function getVariant(colorID, sizeID, productID){
+            $.ajax({
+                type: "POST",
+                url: "{{ route('get.variant') }}",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    color: colorID,
+                    size: sizeID,
+                    productID: productID
+                },
+                success: function(response) {
+                    var option = `<h3 class="price">$${response.price}</h3>`;
+                    $('.price').html(option);
+                }
+            });
+        }
+    </script>
 @endpush

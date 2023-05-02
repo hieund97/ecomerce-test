@@ -10,6 +10,14 @@ return[
     ],
 
     /**
+     * Attribute type
+     */
+    'attribute_type' => [
+        'size' => 1,
+        'color' => 2,
+    ],
+
+    /**
      * Blog status (Approve)
      */
     'blog_status' => [ 

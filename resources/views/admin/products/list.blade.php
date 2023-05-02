@@ -47,9 +47,10 @@
                                         <td><img class="image-product"
                                                 @foreach ($product->image as $image)
                                                     @if ($image->is_primary == 1)
-                                                    src="{{ asset('storage/images/' . $image->name) }}"></td>
+                                                        src="{{ asset('storage/images/' . $image->name) }}">
                                                     @endif
                                                 @endforeach
+                                        </td>
                                         <td>{{ $product->price }}$</td>
                                         <td>
                                             @foreach ($product->categories as $cate)

@@ -26,7 +26,7 @@ class ProductRequest extends FormRequest
         return [
             'name' => 'required|unique:products,name,'.$this->id,
             'description' => 'required|min:3|max:255',
-            'details' => 'required|min:3',
+            'additional_information' => 'required|min:3',
             'sku' => 'required|unique:products,sku,'.$this->id,
             'price' => 'required|numeric',
             'quantity' => 'numeric|required',
@@ -35,7 +35,7 @@ class ProductRequest extends FormRequest
             'highlight' => 'numeric',
             'status' => 'required|numeric',
             'related_product_id' => 'nullable',
-            'image' => 'required|max:5000|mimes:jpeg,png,jpg',
+            'image.*' => 'required|max:5000|mimes:jpeg,png,jpg',
             'image-prod.*' => 'required|max:5000|mimes:jpeg,png,jpg',
         ];
     }

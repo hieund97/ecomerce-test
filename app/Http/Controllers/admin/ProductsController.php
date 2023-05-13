@@ -25,7 +25,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $aryProduct = Products::with(['categories', 'image'=>function($q){$q->where('image_type', config('handle.image_type.product'));}])->paginate(5);
+        $aryProduct = Products::with(['categories', 'image'=>function($q){$q->where('image_type', config('handle.image_type.product'))->where('is_primary', config('handle.primary_image.primary'));}])->paginate(5);
         $aryImage = ImageValues::where('is_primary', 1)->get();
         return view('admin.products.list', compact('aryProduct', 'aryImage'));
     }
@@ -71,7 +71,7 @@ class ProductsController extends Controller
                 'status' => $request->status,
                 'quantity' => $request->quantity,
                 'description' => $request->description,
-                'details' => $request->details,
+                'additional_information' => $request->additional_information,
                 'related_product_id' => $request->has('related_product_id') ? implode(',', $request->related_product_id) : null,
             ]);
 
@@ -148,7 +148,7 @@ class ProductsController extends Controller
                 'status' => $request->status,
                 'quantity' => $request->quantity,
                 'description' => $request->description,
-                'details' => $request->details,
+                'additional_information' => $request->additional_information,
                 'related_product_id' => !empty($request->related_product_id) ? implode(',', $request->related_product_id) : null,
             ]);
 
@@ -226,6 +226,15 @@ class ProductsController extends Controller
                 $variant->values()->detach();
                 $variant->delete();
             });
+
+            //Image
+            $image = ImageValues::where('related_id', $product->id)
+                -> where('image_type', config('handle.image_type.product'))
+                ->get();
+            foreach ($image as $key => $value) {
+                $aryImage[] = $value->id;
+            }
+            ImageValues::destroy($aryImage);
             
             //Product
             $product->delete();

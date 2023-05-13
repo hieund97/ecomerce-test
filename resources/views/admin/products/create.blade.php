@@ -43,8 +43,8 @@
                                 placeholder="Enter describtion"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="detail">Detail</label>
-                            <textarea id="product_detail" class="form-control" cols="50" rows="10" name="details"
+                            <label for="additional_information">Additional Information</label>
+                            <textarea id="additional_information" class="form-control" cols="50" rows="10" name="additional_information"
                                 placeholder="Enter detail"></textarea>
                         </div>
                         <div class="form-group">
@@ -203,7 +203,9 @@
 @endsection
 @push('js')
     <script>
-        CKEDITOR.replace('product_detail');
+        CKEDITOR.replace('additional_information');
+
+        CKEDITOR.replace('description');
 
         $(document).ready(function() {
             $('.related_product').select2();

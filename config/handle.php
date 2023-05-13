@@ -61,6 +61,7 @@ return[
         'product' => 1,
         'slider'  => 2,
         'blog'    => 3,
+        'category' => 4,
     ],
 
     /**
@@ -70,6 +71,8 @@ return[
         'product' => 'product',
         'slider'  => 'slider',
         'blog'    => 'blog',
+        'category' => 'category',
+
     ],
 
     /**

@@ -25,7 +25,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $aryProduct = Products::with(['categories', 'image'=>function($q){$q->where('image_type', config('handle.image_type.product'))->where('is_primary', config('handle.primary_image.primary'));}])->paginate(5);
+        $aryProduct = Products::with(['categories', 'image'=>function($q){$q->where('image_type', config('handle.image_type.product'))
+                                                                            ->where('is_primary', config('handle.primary_image.primary'));}])
+                                    ->paginate(config('handle.admin_paginate'));
         $aryImage = ImageValues::where('is_primary', 1)->get();
         return view('admin.products.list', compact('aryProduct', 'aryImage'));
     }

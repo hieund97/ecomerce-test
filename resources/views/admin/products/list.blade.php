@@ -29,13 +29,12 @@
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
-                                    <th width='5%'>ID</th>
+                                    <th width='10%'>ID</th>
                                     <th width='20%'>Name</th>
                                     <th width='20%'>Image</th>
                                     <th width='10%'>Price</th>
-                                    <th width='10%'>Category</th>
-                                    <th width='5%'>Status</th>
-                                    <th width='20%'>Description</th>
+                                    <th width='20%'>Category</th>
+                                    <th width='10%'>Status</th>
                                     <th width='10%'>Action</th>
                                 </tr>
                             </thead>
@@ -63,7 +62,6 @@
                                                 id="status-{{ $product->id }}"
                                                 for="status">{{ $product->status == 1 ? 'On' : 'Off' }}</label>
                                         </td>
-                                        <td>{{ $product->description }}</td>
                                         <td>
                                             <a href="{{ route('edit.products', $product->id) }}" class="btn btn-primary"><i
                                                     class="fas fa-edit"></i></a>

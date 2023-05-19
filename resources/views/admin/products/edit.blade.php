@@ -41,9 +41,9 @@
                                 placeholder="Enter describtion">{{ $product->description }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="detail">Detail</label>
-                            <textarea id="product_detail" class="form-control" cols="50" rows="10" name="details"
-                                placeholder="Enter detail">{{ $product->details }}</textarea>
+                            <label for="additional_information">Additional Information</label>
+                            <textarea id="additional_information" class="form-control" cols="50" rows="10" name="additional_information"
+                                placeholder="Enter detail">{{ $product->additional_information }}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Attribute</label>
@@ -239,8 +239,9 @@
 @endsection
 @push('js')
     <script>
-        CKEDITOR.replace('product_detail');
+        CKEDITOR.replace('additional_information');
 
+        CKEDITOR.replace('description');
 
         $('.input-images-1').imageUploader({
             imagesInputName: 'image-prod',
@@ -263,7 +264,7 @@
                 var statusValue = $('#status').val();
                 var quantityValue = $('#quantity').val();
                 var descriptionValue = $('#description').val();
-                var detailsValue = $('#product_detail').val();
+                var additionalInfosValue = $('#additional_information').val();
                 var relatedValue = $('#related_product').val();
                 var aryCategoryValue = $('.category-id:checked').map(function() {
                     return this.value
@@ -293,7 +294,7 @@
                 formData.append('status', statusValue);
                 formData.append('quantity', quantityValue);
                 formData.append('description', descriptionValue);
-                formData.append('details', detailsValue);
+                formData.append('additional_information', additionalInfosValue);
                 formData.append('related_product_id', relatedValue);
                 formData.append('category', JSON.stringify(aryCategoryValue));
                 formData.append('attribute_value', JSON.stringify(aryAttributeValue));

@@ -1,26 +1,38 @@
 <?php
 
-return[
+return [
     /**
      * Basic status (On, Off)
      */
-    'status' => [ 
+    'status' => [
         'off' => 0,
         'on'  => 1,
     ],
 
     /**
+     * Highlight product (Yes, No)
+     */
+    'highlight' => [
+        'no' => 0,
+        'yes'  => 1,
+    ],
+
+    /**
+     * Show number of admin paginate
+     */
+    'admin_paginate' => 5,
+    /**
      * Attribute type
      */
     'attribute_type' => [
-        'size' => 1,
+        'size'  => 1,
         'color' => 2,
     ],
 
     /**
      * Blog status (Approve)
      */
-    'blog_status' => [ 
+    'blog_status' => [
         'unapprove' => 0,
         'approving' => 1,
         'approved'  => 2,
@@ -29,7 +41,20 @@ return[
     /**
      * Number of category on FE products
      */
-    'show_category' => 20,
+    'show_on_product_page' => [
+        'category' => 6,
+        'tag'      => 6,
+    ],
+
+    /**
+     * Number of category on FE index
+     */
+    'show_cate_index' => 3,
+
+    /**
+     * Number of product on FE index
+     */
+    'show_prod_index' => 8,
 
     /**
      * Number of slider show on FE products
@@ -39,12 +64,17 @@ return[
     /**
      * Number of product show on FE products
      */
-    'show_product' => 12,
+    'show_product' => 2,
 
     /**
-     * destination path of images
+     * destination path to save images
      */
     'destination_path' => 'public/images',
+
+    /**
+     * path to show image
+     */
+    'show_image_path' => 'storage/images/',
 
     /**
      * type_of_category
@@ -86,8 +116,35 @@ return[
     /**
      * type of tags
      */
-    'type_of_tag' =>[
+    'type_of_tag' => [
         'product' => 1,
         'blog'    => 2,
+    ],
+
+    /**
+     * type of product(best seller, new arrivals, hot sales)
+     */
+    'home_category' => [26, 27, 28],
+
+    /**
+     * sorted by option
+     */
+    'sort_option' => [
+        'low_to_high' => 1,
+        'high_to_low' => 2,
+    ],
+
+    /**
+     * type of filter in product menu
+     */
+    'filter' => [
+        'type' => [
+            'category' => 1,
+            'price'    => 2,
+            'color'    => 3,
+            'size'     => 4,
+            'tag'      => 5,
+            'search'   => 6,
+        ],
     ],
 ];

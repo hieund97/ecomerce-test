@@ -1,30 +1,53 @@
 @extends('client.layout.main')
 @section('title', 'Index')
 @section('content')
+    <style>
+        .tab-content>.active {
+            display: flex !important;
+        }
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
+            color: #b7b7b7;
+            font-size: 24px;
+            font-weight: 700;
+            list-style: none;
+            display: inline-block;
+            margin-right: 88px;
+            cursor: pointer;
+        }
+    </style>
+    @php
+        $config = config('handle.home_category');
+        $firstCategory = reset($config);
+        // dd($firstCategory);
+    @endphp
     <!-- Hero Section Begin -->
     <section class="hero">
         <div class="hero__slider owl-carousel">
             @foreach ($arySlider as $slider)
-            <div class="hero__items set-bg" data-setbg="{{ asset('storage/images/' . $slider->image) }}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>{{ $slider->name }}</h6>
-                                <h2>{{ $slider->title }}</h2>
-                                <p>{{ $slider->description }}</p>
-                                <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
-                                <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                @foreach ($slider->image as $image)
+                    <div class="hero__items set-bg" data-setbg="{{ asset('storage/images/' . $image->name) }}">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xl-5 col-lg-7 col-md-8">
+                                    <div class="hero__text">
+                                        <h6>{{ $slider->name }}</h6>
+                                        <h2>{{ $slider->title }}</h2>
+                                        <p>{{ $slider->description }}</p>
+                                        <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                        <div class="hero__social">
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                            <a href="#"><i class="fa fa-twitter"></i></a>
+                                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                                            <a href="#"><i class="fa fa-instagram"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                @endforeach
             @endforeach
         </div>
     </section>
@@ -34,19 +57,24 @@
     <section class="banner spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7 offset-lg-4">
-                    <div class="banner__item">
-                        <div class="banner__item__pic">
-                            <img src="img/banner/banner-1.jpg" alt="">
-                        </div>
-                        <div class="banner__item__text">
-                            <h2>Clothing Collections 2030</h2>
-                            <a href="#">Shop now</a>
+                @foreach ($aryCategory as $key => $cate)
+                    <div class="{{ $loop->even ? 'col-lg-7' : 'col-lg-5' }} {{ $loop->first ? 'offset-lg-4' : '' }}">
+                        <div
+                            class="banner__item {{ $loop->last ? 'banner__item--last' : '' }} {{ !$loop->first && !$loop->last ? 'banner__item--middle' : '' }}">
+                            <div class="banner__item__pic" style="max-width: 70%">
+                                <img class="img-fluid"
+                                    src="{{ asset(config('handle.show_image_path') . $cate['image']['name']) }}"
+                                    alt="">
+                            </div>
+                            <div class="banner__item__text">
+                                <h2>{{ $cate['name'] }}</h2>
+                                <a href="#">Shop now</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="banner__item banner__item--middle">
+                @endforeach
+                {{-- <div class="col-lg-5">
+                    <div class="banner__item">
                         <div class="banner__item__pic">
                             <img src="img/banner/banner-2.jpg" alt="">
                         </div>
@@ -66,7 +94,7 @@
                             <a href="#">Shop now</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -76,6 +104,70 @@
     <section class="product spad">
         <div class="container">
             <div class="row">
+                <div class="col-lg-12">
+                    <ul class=" mb-5 filter__controls" id="pills-tab" role="tablist">
+                        @foreach ($homeCategory as $cate)
+                            <li
+                                class="nav-item {{ $loop->first ? 'active' : '' }} mixitup-control{{ $loop->first ? '-active' : '' }}">
+                                <button class="nav-link btn-home-category" id="{{ $cate->slug }}"
+                                    data-id="{{ $cate->id }}" data-toggle="pill"
+                                    data-target="#{{ $cate->slug }}-tab" type="button" role="tab"
+                                    aria-controls="{{ $cate->slug }}-tab"
+                                    aria-selected="true">{{ $cate->name }}</button>
+                            </li>
+                        @endforeach
+
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                @foreach ($homeCategory as $cate)
+                    <div class="tab-pane fade row " id="{{ $cate->slug }}-tab" role="tabpanel"
+                        aria-labelledby="{{ $cate->slug . '-' . $cate->id }}"></div>
+                @endforeach
+                {{-- @foreach ($aryBestSeller as $bestSeller)
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals" aria-labelledby="pills-home-tab" >
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="{{ asset(config('handle.show_image_path') . $bestSeller->image[0]->name) }}">
+                                <span class="label">New</span>
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                            <span>Compare</span></a></li>
+                                    <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>{{ $bestSeller->name }}</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5>${{ $bestSeller->price }}</h5>
+                                <div class="product__color__select">
+                                    <label for="pc-1">
+                                        <input type="radio" id="pc-1">
+                                    </label>
+                                    <label class="active black" for="pc-2">
+                                        <input type="radio" id="pc-2">
+                                    </label>
+                                    <label class="grey" for="pc-3">
+                                        <input type="radio" id="pc-3">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach --}}
+            </div>
+            {{-- <div class="row">
                 <div class="col-lg-12">
                     <ul class="filter__controls">
                         <li class="active" data-filter="*">Best Sellers</li>
@@ -368,7 +460,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
     <!-- Product Section End -->
@@ -495,3 +587,71 @@
     </section>
     <!-- Latest Blog Section End -->
 @endsection
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            var cateName = $('#pills-tab:first-child button').attr('id');
+            var tabId = '#' + cateName + '-tab';
+            getProductByCategory('{{ $firstCategory }}', tabId);
+
+            $('.nav-link').on('click', function() {
+                // debugger;
+                $('#pills-tabContent .active').html('');
+                var cateId = $(this).data('id');
+                var id = $(this).attr('id');
+                var tabId = '#' + id + '-tab';
+
+                $('#' + id + '-tab').removeClass('show').removeClass('active');
+                getProductByCategory(cateId, tabId);
+            });
+
+        });
+
+        function getProductByCategory(categoryId, tabId) {
+            var path = window.location.origin + '/' + "{{ config('handle.show_image_path') }}";
+            var product = '';
+            $.ajax({
+                type: "POST",
+                url: "{{ route('get.product.by.category') }}",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    cateID: categoryId
+                },
+                beforeSend: function() {
+                    $('.spinner-border').show();
+                },
+                success: function(response) {
+                    $('.spinner-border').hide();
+                    response.forEach(prod => {
+                        product += `<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg" data-setbg="${path + prod.image[0].name}">
+                                                    <span class="label">New</span>
+                                                    <ul class="product__hover">
+                                                        <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                                        <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <h6>${prod.name}</h6>
+                                                    <a href="#" class="add-cart">+ Add To Cart</a>
+                                                    <h5>$${prod.price}</h5>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $(tabId).html(product).addClass(
+                                'active')
+                            .addClass('show').show();
+                    });
+
+                    $('.set-bg').each(function() {
+                        var bg = $(this).data('setbg');
+                        $(this).css('background-image', 'url(' + bg + ')');
+                    });
+
+                }
+            });
+        }
+    </script>
+@endpush

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
+use App\Models\ImageValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -25,7 +26,13 @@ class CategoriesController extends Controller
         $aryCategories = Categories::limit($perPage)->offset($startAt)->get();
 
         $totalPages = ceil(Categories::all()->count() / $perPage);
-        return view('admin.categories.list', compact('aryCategories','perPage','page','startAt','totalPages'));
+
+        //Image
+        $aryCate = Categories::with(['image' => function ($q) {
+            $q->where('image_type', config('handle.image_type.category'));
+        }])->get();
+
+        return view('admin.categories.list', compact('aryCategories','perPage','page','startAt','totalPages', 'aryCate'));
     }
 
     /**
@@ -59,13 +66,28 @@ class CategoriesController extends Controller
             return redirect(route('create.categories'))->withErrors($valiadator)->withInput();
         }
 
-        Categories::create([
+
+        $cate = Categories::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name, '-'),
             'parent_id' => $request->parent_id,
             'status' => $request->status,
             'type' => $request->type,
         ]);
+
+        //Image
+        $image = $request->image;
+        $destination_path      = config('handle.destination_path');
+        $imageName             = config('handle.type_image_path.category') . '/' . $image->getClientOriginalName();
+        $image->storeAs($destination_path, $imageName);
+        
+        ImageValues::create([
+            'name' => 'category/'.$image->getClientOriginalName(),
+            'related_id' => $cate->id,
+            'image_type' => config('handle.image_type.category'),
+            'is_primary' => config('handle.primary_image.primary')
+        ]);
+
         
 
         session()->flash('edit_success', 'success');
@@ -133,6 +155,13 @@ class CategoriesController extends Controller
     {
         $category = Categories::findOrFail($id);
         $category->delete();
+        
+        $image = ImageValues::where('related_id', $id)
+        ->where('image_type', config('handle.image_type.category'))
+        ->get();
+
+        ImageValues::destroy($image);
+
         session()->flash('delete_success', 'success');
         return redirect(route('list.categories'));
     }

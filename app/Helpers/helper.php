@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ImageValues;
+use App\Models\Products;
 use Carbon\Carbon;
 
 function generateVariant($data)

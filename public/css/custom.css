@@ -122,7 +122,11 @@
     border-color: #4caf50;
 }
 
-.image-slider{
+.image-slider {
+    max-width: 50%;
+}
+
+.image-category{
     max-width: 50%;
 }
 

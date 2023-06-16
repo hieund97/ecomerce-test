@@ -21,7 +21,7 @@
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
+                            <li class="{{ strpos(Request::route()->getName(), 'blog') !== false ? 'active' : '' }}"><a href="{{ route('index.blog') }}">Blog</a></li>
                             <li><a href="./contact.html">Contacts</a></li>
                         </ul>
                     </nav>

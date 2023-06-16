@@ -39,4 +39,14 @@ class ImageValues extends Model
     {
         return $this->belongsTo(Slider::class, 'related_id', 'id');
     }
+
+    /**
+     * Get the category that owns the ImageValues
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'related_id', 'id');
+    }
 }

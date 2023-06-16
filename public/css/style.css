@@ -912,6 +912,22 @@ ol {
 	padding-bottom: 60px;
 }
 
+ .btn-home-category{
+	color: #b7b7b7;
+	font-size: 24px;
+	font-weight: 700;
+	list-style: none;
+	display: inline-block;
+	margin-right: 88px;
+	cursor: pointer;
+	border: none;
+	background: transparent;
+} 
+
+#pills-tab .active button{
+	color: #111111;
+}
+
 .filter__controls {
 	text-align: center;
 	margin-bottom: 45px;
@@ -925,13 +941,15 @@ ol {
 	display: inline-block;
 	margin-right: 88px;
 	cursor: pointer;
+	border: none;
+	background: transparent;
 }
 
 .filter__controls li:last-child {
 	margin-right: 0;
 }
 
-.filter__controls li.active {
+.filter__controls li.active{
 	color: #111111;
 }
 
@@ -1258,9 +1276,13 @@ ol {
 	transition: all, 0.3s;
 }
 
+.shop__sidebar__price ul li a.active,
+.shop__sidebar__categories ul li a.active{
+	color: #111111;
+}
+
 .shop__sidebar__categories ul li a:hover,
-.shop__sidebar__price ul li a:hover,
-.shop__sidebar__brand ul li a:hover {
+.shop__sidebar__price ul li a:hover {
 	color: #111111;
 }
 
@@ -1302,6 +1324,17 @@ ol {
 
 .shop__sidebar__color {
 	padding-top: 15px;
+}
+
+.shop__sidebar__color label.active:after {
+	position: absolute;
+    left: -3px;
+    top: -3px;
+    height: 36px;
+    width: 36px;
+    border: 1px solid #1753ed;
+    content: "";
+    border-radius: 50%;
 }
 
 .shop__sidebar__color label {
@@ -1386,9 +1419,10 @@ ol {
 	transition: all, 0.3s;
 }
 
-.shop__sidebar__tags a:hover {
+.shop__sidebar__tags a.active {
 	background: #111111;
 	color: #ffffff;
+	border-color: #111111;
 }
 
 .shop__sidebar__accordion .card-heading a:after,

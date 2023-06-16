@@ -130,12 +130,14 @@ Route::group([
     'namespace' => 'App\Http\Controllers\client'
 ], function(){
     Route::get('/', 'MainController@index')->name('index.client');
+    Route::post('/', 'MainController@getProductByCategory')->name('get.product.by.category');
     Route::group([
         'prefix' => 'product'
     ], function(){
         Route::get('/', 'ProductsController@index')->name('index.product');
         Route::get('/{slug}', 'ProductsController@detail')->name('index.product.detail');
         Route::post('/get-variant', 'ProductsController@getVariant')->name('get.variant');
+        Route::post('/filter', 'ProductsController@filter')->name('index.filter');
     });
     Route::group([
         'prefix' => 'blog'

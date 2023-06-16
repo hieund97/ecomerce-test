@@ -39,4 +39,13 @@ class Categories extends Model
         return $this->belongsToMany(Products::class, 'product_category_pivot', 'category_id', 'product_id');
     }
     
+    /**
+     * Get the image associated with the Categories
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function image()
+    {
+        return $this->hasOne(ImageValues::class, 'related_id', 'id');
+    }
 }

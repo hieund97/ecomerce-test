@@ -219,3 +219,77 @@
     });
 
 })(jQuery);
+
+var page = 1;
+
+function getProduct(imagePath, isLoadMore = false, data = []) {
+
+    isLoadMore ? page = page + 1 : page = 1;
+    
+    var ENDPOINT = window.location.origin;
+    var path = window.location.origin + '/' + imagePath;
+    var productHTML = '';
+    var url = ENDPOINT + '/product/filter?page=' + page;
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: data,
+        beforeSend: function() {
+            $('.spinner-border').show();
+        },
+        success: function(response) {
+            $('.spinner-border').hide();
+            response.data.forEach(prod => {
+                productHTML += `<div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="${path + prod.image[0].name}">
+                                            <ul class="product__hover">
+                                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                                </li>
+                                                <li><a href=""><img src="img/icon/search.png" alt=""></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6>${prod.name}</h6>
+                                            <a href="#" class="add-cart">+ Add To Cart</a>
+                                            <h5>${prod.price}</h5>
+                                            
+                                        </div>
+                                    </div>
+                                </div>`;
+            });
+
+            if (page > 1) {
+                $('#product-item').append(productHTML);
+            } else {
+                $('#product-item').html(productHTML);
+            }
+
+            if (page == response.last_page) {
+                $("#load-more-button").hide();
+            } else {
+                $("#load-more-button").prop('disabled', false);
+                $("#load-more-button").show();
+                var dataJSON = JSON.stringify(data);
+                $("#data-load-more").val(dataJSON);
+                $('#sort-by-select').data('prod', dataJSON);
+            }
+
+            $('#show-result').html(`Showing ${response.to} of ${response.total} results`);
+
+            $('.set-bg').each(function() {
+                var bg = $(this).data('setbg');
+                $(this).css('background-image', 'url(' + bg + ')');
+            });            
+        }
+    });
+
+}

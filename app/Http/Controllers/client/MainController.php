@@ -53,9 +53,7 @@ class MainController extends Controller
             ->limit(config('handle.show_prod_index'))
             ->get()
             ;
-
-            // dd($aryProduct);
-
+            
         return response()->json($aryProduct, 200);
     }
 }

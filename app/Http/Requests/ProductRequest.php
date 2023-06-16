@@ -35,7 +35,6 @@ class ProductRequest extends FormRequest
             'highlight' => 'numeric',
             'status' => 'required|numeric',
             'related_product_id' => 'nullable',
-            // 'related_image.*' => 'required|max:5000|mimes:jpeg,png,jpg',
         ];
     }
 

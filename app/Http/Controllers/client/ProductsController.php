@@ -40,7 +40,7 @@ class ProductsController extends Controller
         }])
             ->where('status', config('handle.status.on'))
             ->paginate(config('handle.show_product'));
-        // dd($aryProduct);
+            
         return response()->json($aryProduct, 200);
     }
 

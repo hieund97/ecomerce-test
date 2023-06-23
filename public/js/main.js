@@ -6,9 +6,8 @@
     Version: 1.0
     Created: Colorib
 ---------------------------------------------------------  */
-
 'use strict';
-
+var ENDPOINT = window.location.origin;
 (function ($) {
 
     /*------------------
@@ -201,7 +200,42 @@
             }
         }
         $button.parent().find('input').val(newVal);
+        var id = $button.parent().data('id');
+        var price = $button.parent().data('price');
+        var rowId = $button.parent().data('rowid');
+ 
+        qtyChange(newVal, id, price, rowId);
     });
+
+    function qtyChange(newVal, id, price, rowId){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var url = ENDPOINT + '/cart/qty-change';
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                qty: newVal,
+                rowId: rowId,
+            },
+            success: function (response) {
+                var total = price * response.qty;
+                var priceHTML = `$ ${total}`;
+                $('.price-' + id).html(priceHTML);
+
+                var totalHTML = response.total;
+                $('#total-price').html('$ '+totalHTML)
+
+                var countHTML = response.count;
+                $('#number-cart').html(countHTML)
+            }
+        });
+    }
 
     /*------------------
         Achieve Counter
@@ -223,11 +257,9 @@
 var page = 1;
 
 function getProduct(imagePath, isLoadMore = false, data = []) {
-
     isLoadMore ? page = page + 1 : page = 1;
-    
-    var ENDPOINT = window.location.origin;
-    var path = window.location.origin + '/' + imagePath;
+    var path = ENDPOINT + '/' + imagePath;
+    var detailUrl = ENDPOINT + '/product/';
     var productHTML = '';
     var url = ENDPOINT + '/product/filter?page=' + page;
 
@@ -247,21 +279,21 @@ function getProduct(imagePath, isLoadMore = false, data = []) {
         success: function(response) {
             $('.spinner-border').hide();
             response.data.forEach(prod => {
+                var urlProd = detailUrl + prod.slug;
                 productHTML += `<div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="${path + prod.image[0].name}">
-                                            <ul class="product__hover">
-                                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
-                                                </li>
-                                                <li><a href=""><img src="img/icon/search.png" alt=""></a></li>
-                                            </ul>
-                                        </div>
+                                            <div class="product__item__pic set-bg" data-setbg="${path + prod.image[0].name}">
+                                                <ul class="product__hover">
+                                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                                    <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                                    </li>
+                                                    <li><a href="${urlProd}"><img src="img/icon/search.png" alt=""></a></li>
+                                                </ul>
+                                            </div>
                                         <div class="product__item__text">
                                             <h6>${prod.name}</h6>
                                             <a href="#" class="add-cart">+ Add To Cart</a>
                                             <h5>${prod.price}</h5>
-                                            
                                         </div>
                                     </div>
                                 </div>`;
@@ -291,5 +323,29 @@ function getProduct(imagePath, isLoadMore = false, data = []) {
             });            
         }
     });
+}
 
+function addToCart (url, id, name, qty, price, weight, option = []) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            id: id,
+            name: name,
+            qty: qty,
+            price: price,
+            weight: weight,
+            option: option,
+        },
+        success: function (response) {
+            console.log(123);
+            toastr.success('The products have been added to your cart!')
+        }
+    });
 }

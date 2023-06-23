@@ -31,6 +31,7 @@
 @push('js')
     <script>
         var imagePath = `{{ config('handle.show_image_path') }}`;
+
         $(document).ready(function() {
             getProduct(imagePath);
 
@@ -55,11 +56,6 @@
             $('#sort-by-select').change(function() {
                 var optionSelected = $("#sort-by-select:selected", this);
                 var valueSelected = this.value;
-                console.log(this.value);
-
-                // $(this).find(":selected").each(function() {
-                //     console.log($(this).val());
-                // });
             });
         });
     </script>

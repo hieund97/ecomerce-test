@@ -131,6 +131,8 @@ Route::group([
 ], function(){
     Route::get('/', 'MainController@index')->name('index.client');
     Route::post('/', 'MainController@getProductByCategory')->name('get.product.by.category');
+
+    //Client Product
     Route::group([
         'prefix' => 'product'
     ], function(){
@@ -139,10 +141,22 @@ Route::group([
         Route::post('/get-variant', 'ProductsController@getVariant')->name('get.variant');
         Route::post('/filter', 'ProductsController@filter')->name('index.filter');
     });
+
+    //Client Blog
     Route::group([
         'prefix' => 'blog'
     ], function(){
         Route::get('/', 'BlogsController@index')->name('index.blog');
         Route::get('/{slug}', 'BlogsController@detail')->name('blog.detail');
+    });
+
+    //Client Cart
+    Route::group([
+        'prefix' => 'cart'
+    ], function(){
+        Route::get('/', 'CartsController@index')->name('index.cart');
+        Route::post('/add', 'CartsController@addProduct')->name('add.to.cart');
+        Route::post('/qty-change', 'CartsController@qtyChange')->name('quantity.change');
+        Route::post('/delete-item', 'CartsController@deleteItem')->name('delete.item');
     });
 });

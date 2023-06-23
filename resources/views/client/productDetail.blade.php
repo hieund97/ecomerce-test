@@ -7,7 +7,7 @@
         <div class="loader"></div>
     </div>
     <!-- Shop Details Section Begin --> --}}
-   
+
     <section class="shop-details">
         <div class="product__details__pic">
             <div class="container">
@@ -77,11 +77,11 @@
                                                 <label
                                                     class="{{ $value->attribute_id == config('handle.attribute_type.color') ? 'label-color' : 'label-size' }}"
                                                     style="background-color: {{ $value->color_id }}"
-                                                    data-id="{{ $value->id }}"
-                                                    for="{{ $value->name }}"
+                                                    data-id="{{ $value->id }}" for="{{ $value->name }}"
                                                     title="{{ $value->name }}">{{ $value->attribute_id == 1 ? $value->name : '' }}
-                                                    <input name="attr-{{ strtolower($type->name) }}" class="label-attribute" type="radio" value="{{ $value->id }}" id="{{ $value->name }}"
-                                                        data-type="{{ $value->attribute_id }}"
+                                                    <input name="attr-{{ strtolower($type->name) }}"
+                                                        class="label-attribute" type="radio" value="{{ $value->id }}"
+                                                        id="{{ $value->name }}" data-type="{{ $value->attribute_id }}"
                                                         data-product="{{ $product->id }}">
                                                 </label>
                                             @endif
@@ -93,10 +93,12 @@
                             <div class="product__details__cart__option">
                                 <div class="quantity">
                                     <div class="pro-qty">
-                                        <input type="text" value="1">
+                                        <input id="prod-quantity" type="text" value="1">
                                     </div>
                                 </div>
-                                <a href="#" class="primary-btn">add to cart</a>
+                                <button id="add-button" type="button" class="primary-btn">add to cart</button>
+                                <input id="add-data" type="hidden" data-id="{{ $product->id }}"
+                                    data-name="{{ $product->name }}">
                             </div>
                             <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
@@ -265,9 +267,24 @@
                 }
                 getVariant(colorID, sizeID, productID);
             });
+
+            $('#add-button').on('click', function() {
+                var addUrl = `{{ route('add.to.cart') }}`
+                var prodId = $('#add-data').data('id');
+                var prodName = $('#add-data').data('name');
+                var prodQty = $('#prod-quantity').val();
+                var prodPrice = $('#data-price').data('price');
+                var prodWeight = 500;
+                var prodOption = {
+                    'color': colorID,
+                    'size': sizeID,
+                };
+
+                addToCart(addUrl, prodId, prodName, prodQty, prodPrice, prodWeight, prodOption)
+            });
         });
 
-        function getVariant(colorID, sizeID, productID){
+        function getVariant(colorID, sizeID, productID) {
             $.ajax({
                 type: "POST",
                 url: "{{ route('get.variant') }}",
@@ -278,7 +295,8 @@
                     productID: productID
                 },
                 success: function(response) {
-                    var option = `<h3 class="price-product">$${response.price}</h3>`;
+                    var option = `<h3 class="price-product" data-price="${response.price}">$${response.price}</h3>
+                                <input id="data-price" type="hidden" data-price="${response.price}">`;
                     $('.price-product').html(option);
                 }
             });

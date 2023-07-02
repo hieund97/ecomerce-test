@@ -121,6 +121,18 @@ Route::group([
         Route::put('/update', 'TagsController@update')->name('update.tag');
         Route::delete('/delete/{id}', 'TagsController@destroy')->name('delete.tag');
     });
+
+    //Route discount
+    Route::group([
+        'prefix' => 'discount'
+    ], function(){
+        Route::get('/', 'DiscountsController@index')->name('list.discount');
+        Route::get('/create', 'DiscountsController@create')->name('create.discount');
+        Route::post('/store', 'DiscountsController@store')->name('store.discount');
+        Route::get('/edit/{id}', 'DiscountsController@edit')->name('edit.discount');
+        Route::put('/update', 'DiscountsController@update')->name('update.discount');
+        Route::delete('/delete/{id}', 'DiscountsController@destroy')->name('delete.discount');
+    });
 });
 
 /**
@@ -158,5 +170,6 @@ Route::group([
         Route::post('/add', 'CartsController@addProduct')->name('add.to.cart');
         Route::post('/qty-change', 'CartsController@qtyChange')->name('quantity.change');
         Route::post('/delete-item', 'CartsController@deleteItem')->name('delete.item');
+        Route::post('/check-discount', 'CartsController@checkDiscount')->name('check.discount');
     });
 });

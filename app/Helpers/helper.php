@@ -76,3 +76,19 @@ function processImage($files = [], $related_id, $type, $isPrimary = false, $isUp
 
     return false;
 }
+
+function checkValidDay($code)
+{
+    $startDayMaterial = explode('/', $code->start); //MM-dd-YY
+    $endDayMaterial = explode('/', $code->end); //MM-dd-YY
+
+    $today = Carbon::now();
+    $startDay = Carbon::createFromDate((int)$startDayMaterial[2], (int)$startDayMaterial[0], (int)$startDayMaterial[1], 'Asia/Ho_Chi_Minh');
+    $endDay = Carbon::createFromDate((int)$endDayMaterial[2], (int)$endDayMaterial[0], (int)$endDayMaterial[1], 'Asia/Ho_Chi_Minh');
+
+    if($startDay < $today && $endDay > $today){
+        return true;
+    }
+
+    return false;
+}

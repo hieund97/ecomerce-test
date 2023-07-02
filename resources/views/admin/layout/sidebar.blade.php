@@ -217,6 +217,31 @@
                     </ul>
                 </li>
                 {{-- End Tag --}}
+                {{-- Discount --}}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-percentage"></i>
+                        <p>
+                            Discount
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('list.discount') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Discount</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.discount') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Discount</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- End Discount --}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

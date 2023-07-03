@@ -135,6 +135,16 @@ return [
     ],
 
     /**
+     * Type to select in admin page
+     */
+    'type' => [
+        'discount' => [
+            'cash'    => 0,
+            'percent' => 1,
+        ],
+    ],
+
+    /**
      * type of filter in product menu
      */
     'filter' => [

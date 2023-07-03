@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   {{-- Custom css --}}
   <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/cdn.jsdelivr.net_npm_daterangepicker_daterangepicker.css') }}">
   <link rel="stylesheet" href="{{ asset('css/image-uploader.min.css') }}">
   <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -76,6 +77,12 @@
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 
 <script src="{{ asset('js/image-uploader.min.js') }}"></script>
+
+<script src="{{ asset('js/date-range-picker.js') }}"></script>
+
+<script src="{{ asset('js/cdn.jsdelivr.net_momentjs_latest_moment.min.js') }}"></script>
+
+<script src="{{ asset('js/cdn.jsdelivr.net_npm_daterangepicker_daterangepicker.min.js') }}"></script>
 
 @stack('js')
 </body>

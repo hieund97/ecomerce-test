@@ -87,13 +87,14 @@
                     <div class="cart__discount">
                         <h6>Discount codes</h6>
                         <form action="#">
-                            <input type="text" placeholder="Coupon code">
-                            <button type="submit">Apply</button>
+                            <input class="discount-code" type="text" placeholder="Coupon code">
+                            <button class="submit-discount" type="button">Apply</button>
                         </form>
+                        <div id="code-invalid"></div>
                     </div>
                     <div class="cart__total">
                         <h6>Cart total</h6>
-                        <ul>
+                        <ul id="cart-total">
                             {{-- <li>Subtotal <span>$ {{ Cart::subtotal() }}</span></li> --}}
                             <li>Total <span id="total-price">$ {{ Cart::total() }}</span></li>
                         </ul>
@@ -132,6 +133,31 @@
 
                         var countHTML = response.count;
                         $('#number-cart').html(countHTML)
+                    }
+                });
+            });
+
+            $('.submit-discount').on('click', function() {
+                var code = $('.discount-code').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('check.discount') }}',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        code: code,
+                    },
+                    success: function(response) {
+                        var html = `<li>Discount <span>$ ${response.discount}</span></li>
+                                    <li>Total <span id="total-price">$ ${response.total}</span></li>`;
+
+                        $('#cart-total').html(html)
+                        $('#code-invalid').hide();
+                    },
+                    error: function(xhr){
+                        var html = `<p style="color: red" > ${xhr.responseJSON.message} </p>`
+                        $('#code-invalid').show();
+                        $('#code-invalid').html(html);
                     }
                 });
             });
